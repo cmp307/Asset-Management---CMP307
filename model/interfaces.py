@@ -26,9 +26,9 @@ def reloadFrame(window, layout):
     window = createWindow(layout)
     return window
 
-def init():
-    global windowSize
 
+
+def init():
     
     layout = [
         [pyGUI.Image('scottishGlenLogo.png', background_color="grey80")],
@@ -41,7 +41,7 @@ def init():
     window = createWindow(layout)
     
     return window
-    
+  
     
 def verifyLogin(window, username, password):
 
@@ -49,6 +49,9 @@ def verifyLogin(window, username, password):
     if (userVerify(username, md5(password.encode()).hexdigest())):
         layout = [
             [pyGUI.Image('scottishGlenLogo.png', background_color="grey80")],
+            [pyGUI.Button('Display'), pyGUI.Button('Create')],
+            [pyGUI.Button('Update'), pyGUI.Button('Delete')],
+            [pyGUI.Button('Backup'), pyGUI.Button('Submit')],
         ]
         window = reloadFrame(window, layout)
     else:
