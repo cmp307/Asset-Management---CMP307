@@ -6,12 +6,12 @@ def install(package):
     else:
         pip._internal.main(['install', package])
 
-# Example
-if __name__ == '__main__':
-    install('argh')
-    
-packages = ['PySimpleGui', 'mysql-connector']
 
-for c in packages:
-    install(c)
+if __name__ == '__main__':
+    packages = ['PySimpleGui', 'mysql-connector']
+
+    for c in packages:
+        install(c)
+
+    
 
