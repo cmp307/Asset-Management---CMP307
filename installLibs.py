@@ -1,5 +1,17 @@
-import sys
-import subprocess
+import pip
 
-# implement pip as a subprocess:
-subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'PySimpleGUI'])
+def install(package):
+    if hasattr(pip, 'main'):
+        pip.main(['install', package])
+    else:
+        pip._internal.main(['install', package])
+
+# Example
+if __name__ == '__main__':
+    install('argh')
+
+
+list = ['PySimpleGui', 'mysql', 'ctypes', 'math', 'hashlib']
+
+for c in list:
+    install(c)
