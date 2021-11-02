@@ -1,5 +1,9 @@
-# project-EwanStewart
+PYTHON APP - REQUIRES LIBRARIES PIP, PYSIMPLEGUI, MYSQL-CONNECTOR
 
+PIP is installed with recent versions of Python however I have noticed the appsanywhere version version doesn't include it.
 
-Must install PySimpleGUI, mysql-connector to run view/main.py.
-Script to install libraries provided in installLibs.py
+installLibs.py is on the root of the repo and will install pysimplegui and mysql-connector using PIP.
+
+view/main.py will start the app.
+
+login: username: admin           password: admin
