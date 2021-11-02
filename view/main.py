@@ -5,7 +5,7 @@ import re as regex
 sys.path.insert(1, '../model')
 sys.path.insert(1, '../controller')
 
-from SQL import create
+from SQL import create, get, update, delete
 from interfaces import *
 
 def checkSpecial(val):
@@ -37,10 +37,42 @@ def main():
         if event == pyGUI.WIN_CLOSED:
             window.close()
             break
+        if event == 'Return to Operations':
+            window = crudControls(window)
         if event == 'Create':
             window = createItem(window)
+        if event == 'Update':
+            window = updateItem(window)
+        if event == 'Delete':
+            window = deleteItem(window)
+        if event == 'Delete Asset':
+            for c in values:
+                if values[c] != '':
+                   if not (checkSpecial(values)):
+                        window = deleteItem(window)
+                        break
+                   else:
+                        delete(values)
+                        window = crudControls(window)
+                        break
+                else:
+                    window = deleteItem(window)
+                    break
+        if event == 'Update Asset':
+            for c in values:
+                if values[c] != '':
+                   if not (checkSpecial(values)):
+                        window = updateItem(window)
+                        break
+                   else:
+                        update(values)
+                        window = crudControls(window)
+                        break
+                else:
+                    window = updateItem(window)
+                    break
         if event == 'Display':
-            window = displayItems(window)
+            window = displayItems(window, get())
         if event == 'Create Asset':
             for c in values:
                 if values[c] != '':
