@@ -33,5 +33,4 @@ def delete(formData):
 
 def backup():
     conn, mydb = connectToDatabase()
-    sqlString = "BACKUP DATABASE cmp307data"
-    TO DISK = 'D:\backups\testDB.bak'; 
+
