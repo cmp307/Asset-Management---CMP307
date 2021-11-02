@@ -8,7 +8,7 @@ import re as regex
 
 def getCenterScreen():
     user32 = windll.user32
-    screensize = floor(user32.GetSystemMetrics(0) / 2), floor(user32.GetSystemMetrics(1) / 2)
+    screensize = floor(user32.GetSystemMetrics(0) / 2) * 2, floor(user32.GetSystemMetrics(1) / 2) * 2
     return screensize
 
 def createWindow(layout):
@@ -146,9 +146,12 @@ def displayItems(window, get):
     layout = [
         [pyGUI.Button('Return to Operations', bind_return_key = True)],
     ]
-    
-    headings = [pyGUI.Text('ID', size=(5, 3)), pyGUI.Text('Name', size=(5, 3)), pyGUI.Text('Device Type', size=(5, 3)), pyGUI.Text('Description', size=(5, 3)), pyGUI.Text('Model', size=(5, 3)), pyGUI.Text('Manufacturer', size=(5, 3)), pyGUI.Text('Internal ID', size=(5, 3)), pyGUI.Text('MAC Address', size=(5, 3)),
-                pyGUI.Text('IP Address', size=(5, 3)), pyGUI.Text('Physical Location', size=(5, 3)), pyGUI.Text('Purchase Date', size=(5, 3)), pyGUI.Text('Warranty Info', size=(5, 3)), pyGUI.Text('Notes', size=(5, 3))]
+
+    x = 10
+    y = 3
+    headings = [pyGUI.Text('ID', size=(x, y)), pyGUI.Text('Name', size=(x, y)), pyGUI.Text('Device Type', size=(x, y)), pyGUI.Text('Description', size=(x, y)),
+               pyGUI.Text('Model', size=(x, y)), pyGUI.Text('Manufacturer', size=(x, y)), pyGUI.Text('Internal ID', size=(x, y)), pyGUI.Text('MAC Address', size=(x, y)),
+               pyGUI.Text('IP Address', size=(x, y)), pyGUI.Text('Physical Location', size=(x, y)), pyGUI.Text('Purchase Date', size=(x, y)), pyGUI.Text('Warranty Info', size=(x, y)), pyGUI.Text('Notes', size=(x, y))]
     layout.append(headings)
     var = []
 
@@ -156,7 +159,7 @@ def displayItems(window, get):
     for i in range(0, len(get)):
         row = []
         for j in range(len(get[i])):
-            row.append(pyGUI.Listbox(values=(get[i][j], ''), size=(5, 4), key='_LISTBOX_'))
+            row.append(pyGUI.Listbox(values=(get[i][j], ''), size=(10, 3), key='_LISTBOX_'))
         var.append(row)
 
     layout.append(var)

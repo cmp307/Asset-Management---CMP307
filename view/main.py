@@ -30,7 +30,6 @@ def checkSpecial(val):
 def main():
     global window
     window = init()
-    window = crudControls(window)
     while True:
         event, values = window.read()
         
