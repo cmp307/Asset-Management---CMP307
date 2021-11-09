@@ -5,7 +5,7 @@ import re as regex
 sys.path.insert(1, '../model')
 sys.path.insert(1, '../controller')
 
-from SQL import create, get, update, delete
+from SQL import create, get, update, delete, getWhere
 from interfaces import *
 
 def checkSpecial(val):
@@ -60,18 +60,25 @@ def main():
         if event == 'Update Asset':
             for c in values:
                 if values[c] != '':
-                   if not (checkSpecial(values)):
-                        window = updateItem(window)
-                        break
-                   else:
-                        update(values)
-                        window = crudControls(window)
-                        break
+                    update(values)
+                    window = crudControls(window)
+                    break
                 else:
                     window = updateItem(window)
                     break
+        if event == 'Find Asset':
+            if values[0] != '':
+                data = getWhere(values[0])
+                if (data):
+                    window = updateItemShowData(window, data)
+                else:
+                    window = updateItem(window)      
+            else:
+                window = updateItem(window)
+                    
         if event == 'Display':
             window = displayItems(window, get())
+            
         if event == 'Create Asset':
             for c in values:
                 if values[c] != '':

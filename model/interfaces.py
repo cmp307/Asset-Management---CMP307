@@ -88,7 +88,7 @@ def badLogin(window):
 def createItem(window):
     
     layout = [
-            [pyGUI.Button('Return to Operations', bind_return_key = True)],
+            [pyGUI.Button('Return to Operations')],
             [pyGUI.Text('Asset Creation')],
             [pyGUI.Text('Asset Name', size =(15, 1)), pyGUI.InputText()],
             [pyGUI.Text('Device Type', size =(15, 1)), pyGUI.InputText()],
@@ -110,7 +110,7 @@ def createItem(window):
 def deleteItem(window):
     
     layout = [
-            [pyGUI.Button('Return to Operations', bind_return_key = True)],
+            [pyGUI.Button('Return to Operations')],
             [pyGUI.Text('Asset Delete')],
             [pyGUI.Text('Asset ID', size =(15, 1)), pyGUI.InputText()],
             [pyGUI.Button('Delete Asset', bind_return_key = True)],
@@ -122,22 +122,44 @@ def deleteItem(window):
 def updateItem(window):
     
     layout = [
-            [pyGUI.Button('Return to Operations', bind_return_key = True)],
+            [pyGUI.Button('Return to Operations')],
             [pyGUI.Text('Asset Update')],
             [pyGUI.Text('Asset ID', size =(15, 1)), pyGUI.InputText()],
-            [pyGUI.Text('Asset Name', size =(15, 1)), pyGUI.InputText()],
-            [pyGUI.Text('Device Type', size =(15, 1)), pyGUI.InputText()],
-            [pyGUI.Text('Description', size =(15, 1)), pyGUI.InputText()],
-            [pyGUI.Text('Model', size =(15, 1)), pyGUI.InputText()],
-            [pyGUI.Text('Manufacturer', size =(15, 1)), pyGUI.InputText()],
-            [pyGUI.Text('Internal ID', size =(15, 1)), pyGUI.InputText()],
-            [pyGUI.Text('MAC Address', size =(15, 1)), pyGUI.InputText()],
-            [pyGUI.Text('IP Address', size =(15, 1)), pyGUI.InputText()],
-            [pyGUI.Text('Physical Location', size =(15, 1)), pyGUI.InputText()],
-            [pyGUI.Text('Purchase Date', size =(15, 1)), pyGUI.InputText()],
-            [pyGUI.Text('Warranty Information', size =(15, 1)), pyGUI.InputText()],
-            [pyGUI.Text('Notes', size =(15, 1)), pyGUI.InputText()],
-            [pyGUI.Button('Update Asset', bind_return_key = True)],
+            [pyGUI.Text('Asset Name', size =(15, 1)), pyGUI.InputText('Insert Asset ID', disabled=True)],
+            [pyGUI.Text('Device Type', size =(15, 1)), pyGUI.InputText('Insert Asset ID',disabled=True)],
+            [pyGUI.Text('Description', size =(15, 1)), pyGUI.InputText('Insert Asset ID', disabled=True)],
+            [pyGUI.Text('Model', size =(15, 1)), pyGUI.InputText('Insert Asset ID', disabled=True)],
+            [pyGUI.Text('Manufacturer', size =(15, 1)), pyGUI.InputText('Insert Asset ID', disabled=True)],
+            [pyGUI.Text('Internal ID', size =(15, 1)), pyGUI.InputText('Insert Asset ID', disabled=True)],
+            [pyGUI.Text('MAC Address', size =(15, 1)), pyGUI.InputText('Insert Asset ID', disabled=True)],
+            [pyGUI.Text('IP Address', size =(15, 1)), pyGUI.InputText('Insert Asset ID', disabled=True)],
+            [pyGUI.Text('Physical Location', size =(15, 1)), pyGUI.InputText('Insert Asset ID', disabled=True)],
+            [pyGUI.Text('Purchase Date', size =(15, 1)), pyGUI.InputText('Insert Asset ID', disabled=True)],
+            [pyGUI.Text('Warranty Information', size =(15, 1)), pyGUI.InputText('Insert Asset ID', disabled=True)],
+            [pyGUI.Text('Notes', size =(15, 1)), pyGUI.InputText('Insert Asset ID', disabled=True)],
+            [pyGUI.Button('Find Asset')],
+        ]
+    window = reloadFrame(window, layout)
+    return window
+    
+def updateItemShowData(window, vals):
+    layout = [
+            [pyGUI.Button('Return to Operations')],
+            [pyGUI.Text('Asset Update')],
+            [pyGUI.Text('Asset ID', size =(15, 1)), pyGUI.InputText(vals[0][0], disabled=True)],
+            [pyGUI.Text('Asset Name', size =(15, 1)), pyGUI.InputText(vals[0][1])],
+            [pyGUI.Text('Device Type', size =(15, 1)), pyGUI.InputText(vals[0][2])],
+            [pyGUI.Text('Description', size =(15, 1)), pyGUI.InputText(vals[0][3])],
+            [pyGUI.Text('Model', size =(15, 1)), pyGUI.InputText(vals[0][4])],
+            [pyGUI.Text('Manufacturer', size =(15, 1)), pyGUI.InputText(vals[0][5])],
+            [pyGUI.Text('Internal ID', size =(15, 1)), pyGUI.InputText(vals[0][6])],
+            [pyGUI.Text('MAC Address', size =(15, 1)), pyGUI.InputText(vals[0][7])],
+            [pyGUI.Text('IP Address', size =(15, 1)), pyGUI.InputText(vals[0][8])],
+            [pyGUI.Text('Physical Location', size =(15, 1)), pyGUI.InputText(vals[0][9])],
+            [pyGUI.Text('Purchase Date', size =(15, 1)), pyGUI.InputText(vals[0][10])],
+            [pyGUI.Text('Warranty Information', size =(15, 1)), pyGUI.InputText(vals[0][11])],
+            [pyGUI.Text('Notes', size =(15, 1)), pyGUI.InputText(vals[0][12])],
+            [pyGUI.Button('Update Asset')],
         ]
     window = reloadFrame(window, layout)
     return window
@@ -153,7 +175,7 @@ def displayItems(window, get):
         data.append(row)
     
     layout = [
-        [pyGUI.Button('Return to Operations', bind_return_key = True)],
+        [pyGUI.Button('Return to Operations')],
         [pyGUI.Table(data, headings=['Asset ID', 'Name', 'Device Type', 'Description', 'Model', 'Manufacturer', 'Internal ID', 'MAC Address', 'IP Address', 'Physical Location', 'Purchase Date', 'Warranty Info', 'Notes'])],
     ]
    
@@ -163,7 +185,7 @@ def displayItems(window, get):
 def badCreateItem(window):
     
     layout = [
-            [pyGUI.Button('Return to Operations', bind_return_key = True)],
+            [pyGUI.Button('Return to Operations')],
             [pyGUI.Text('Asset Creation')],
             [pyGUI.Text('Asset Name', size =(15, 1)), pyGUI.InputText()],
             [pyGUI.Text('Device Type', size =(15, 1)), pyGUI.InputText()],

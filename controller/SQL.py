@@ -18,6 +18,12 @@ def get():
     sqlString = "SELECT * FROM cmp307data"
     conn.execute(sqlString)
     return conn.fetchall()
+    
+def getWhere(id):
+    conn, mydb = connectToDatabase()
+    sqlString = "SELECT * FROM cmp307data WHERE assetID = %s"
+    conn.execute(sqlString, (id,))
+    return conn.fetchall()
 
 def update(formData):
     conn, mydb = connectToDatabase()
