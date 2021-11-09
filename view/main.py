@@ -16,7 +16,6 @@ def checkSpecial(val):
     for c in val:
         values.append(val[c])
         i+=1
-
     i = 0
 
     for c in values:
@@ -30,6 +29,7 @@ def checkSpecial(val):
 def main():
     global window
     window = init()
+    window = crudControls(window)
     while True:
         event, values = window.read()
         

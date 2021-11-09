@@ -144,27 +144,18 @@ def updateItem(window):
 
 def displayItems(window, get):
     
-    layout = [
-        [pyGUI.Button('Return to Operations', bind_return_key = True)],
-    ]
+    data = []
 
-    x = 10
-    y = 3
-    headings = [pyGUI.Text('ID', size=(x, y)), pyGUI.Text('Name', size=(x, y)), pyGUI.Text('Device Type', size=(x, y)), pyGUI.Text('Description', size=(x, y)),
-               pyGUI.Text('Model', size=(x, y)), pyGUI.Text('Manufacturer', size=(x, y)), pyGUI.Text('Internal ID', size=(x, y)), pyGUI.Text('MAC Address', size=(x, y)),
-               pyGUI.Text('IP Address', size=(x, y)), pyGUI.Text('Location', size=(x, y)), pyGUI.Text('Purchase Date', size=(x, y)), pyGUI.Text('Warranty Info', size=(x, y)), pyGUI.Text('Notes', size=(x, y))]
-    layout.append(headings)
-    var = []
-
-    print(get[0][0])
     for i in range(0, len(get)):
         row = []
         for j in range(len(get[i])):
-            row.append(pyGUI.Listbox(values=(get[i][j], ''), size=(10, 3), horizontal_scroll=True, key='_LISTBOX_'))
-        var.append(row)
-
-    layout.append(var)
-
+            row.append(get[i][j])
+        data.append(row)
+    
+    layout = [
+        [pyGUI.Button('Return to Operations', bind_return_key = True)],
+        [pyGUI.Table(data, headings=['Asset ID', 'Name', 'Device Type', 'Description', 'Model', 'Manufacturer', 'Internal ID', 'MAC Address', 'IP Address', 'Physical Location', 'Purchase Date', 'Warranty Info', 'Notes'])],
+    ]
    
     window = reloadFrame(window, layout)
     return window
