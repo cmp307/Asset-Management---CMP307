@@ -93,7 +93,8 @@ def main():
                     window = badCreateItem(window)
                     break
                     
-                    
+        if event == 'Check table for vunerabilities':
+            window = checkVun(window)
                 
         if event == 'Login':
             if (checkSpecial(values)):

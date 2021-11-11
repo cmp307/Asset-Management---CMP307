@@ -4,6 +4,7 @@ from math import floor
 from connection import connectToDatabase
 from SQL import userVerify
 from hashlib import md5
+from vunerability import *
 import re as regex
 
 def getCenterScreen():
@@ -165,20 +166,59 @@ def updateItemShowData(window, vals):
     return window
 
 def displayItems(window, get):
+
+    global toSearch
     
     data = []
+
+    toSearch = []
 
     for i in range(0, len(get)):
         row = []
         for j in range(len(get[i])):
+            
+            if (j==3):
+               toSearch.append(get[i][j])
+               
             row.append(get[i][j])
         data.append(row)
-    
+
+    print(toSearch)
     layout = [
         [pyGUI.Button('Return to Operations')],
         [pyGUI.Table(data, headings=['Asset ID', 'Name', 'Device Type', 'Description', 'Model', 'Manufacturer', 'Internal ID', 'MAC Address', 'IP Address', 'Physical Location', 'Purchase Date', 'Warranty Info', 'Notes'])],
+        [pyGUI.Button('Check table for vunerabilities')],
+        [pyGUI.Button('Search for vunerabilites')],
     ]
-   
+
+    window = reloadFrame(window, layout)
+    return window
+
+def checkVun(window):
+    global toSearch
+    data = []
+
+    for i in range(0, len(toSearch)):
+        rows, desc, rating = format(vunerabilitySearch(toSearch[i].replace(" ", "+")))
+        row = []
+        if rows > 0:
+            row.append(toSearch[i] + ' ' + 'has ' + str(rows) + ' vunerabilities')
+            for j in range(0, rows):            
+                row.append('Severity Level: ' + rating[j] + ' Description:' + desc[j])
+            data.append(row)
+
+    
+
+
+    
+    layout = [
+        [pyGUI.Button('Return to Operations')],
+        [pyGUI.Listbox(values=(data[0]), size=(100,10), horizontal_scroll=True), pyGUI.Listbox(values=(data[1]), size=(100,10), horizontal_scroll=True)],
+        [pyGUI.Button('Search for vunerabilites')],
+    ]
+ 
+
+
     window = reloadFrame(window, layout)
     return window
 
