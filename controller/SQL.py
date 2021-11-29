@@ -7,10 +7,10 @@ def userVerify(p1, p2):
     return conn.fetchall()
 
 
-def create(formData):
+def create_asset(formData):
     conn, mydb = connectToDatabase()
     sqlString = "INSERT INTO cmp307data (assetName, deviceType, description, model, manufacturer, internalID, macAddress, ipAddress, physicalLocation, purchaseDate, warrantyInfo, notes) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
-    conn.execute(sqlString, (formData[0], formData[1], formData[2], formData[3], formData[4], formData[5], formData[6], formData[7], formData[8], formData[9], formData[10], formData[11]))
+    conn.execute(sqlString, (formData['-C_NAME-'], formData['-C_TYPE-'], formData['-C_DESCRIPTION-'], formData['-C_MODEL-'], formData['-C_MANU-'], formData['-C_INTERNAL_ID-'], formData['-C_MAC-'], formData['-C_IP-'], formData['-C_LOC-'], formData['-C_DATE-'], formData['-C_WARRANTY-'], formData['-C_NOTES-']))
     mydb.commit()
 
 def get():
