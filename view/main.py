@@ -241,8 +241,17 @@ def main():
             window['-S_ASSET_ID_TEXT-'].update(visible=True)
             window['-S_ASSET_ID_SUBMIT-'].update(visible=True)
 
+
         if event == '-S_ASSET_ID_SUBMIT-':
-            print(getWhere(values['-S_ASSET_ID_INPUT-']))
+            keywords = getWhere(values['-S_ASSET_ID_INPUT-'])
+            if keywords[0][13] != "":
+                setAPIVals(keywords[0][13])
+                layout = checkVun(window)
+                window = reloadFrame(window,layout)
+            else:
+                window['-S_ASSET_ID_ERROR-'].update(visible=True)
+                
+                
         
         if event == 'Backup':
             backup(get())

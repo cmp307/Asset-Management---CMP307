@@ -154,6 +154,7 @@ def vulsearch(window, get):
             [pyGUI.Button('Search entire table for vunerabilities')],
             [pyGUI.Button('Search for vunerabilities by Asset ID')],
             [pyGUI.InputText(enable_events=True, key='-S_ASSET_ID_INPUT-', visible = False), pyGUI.Text('Enter Asset ID', size =(15, 1), enable_events=True, key='-S_ASSET_ID_TEXT-', visible = False)],
+            [pyGUI.Text('No keywords provided in this record', size =(27, 1), enable_events=True, key='-S_ASSET_ID_ERROR-', visible = False)],
             [pyGUI.Button('Submit', key='-S_ASSET_ID_SUBMIT-', visible=False)],
             [pyGUI.Button('Search for vunerabilities by keyword')],
         ]
@@ -261,7 +262,10 @@ def displayItems(window, get):
     window = reloadFrame(window, layout)
     return window
 
-
+def setAPIVals(val):
+    global toSearch
+    toSearch = []
+    toSearch.append(val)
 
 def checkVun(window):
     global toSearch
