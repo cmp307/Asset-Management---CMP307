@@ -20,20 +20,18 @@ def backup(assetData):
     head, sep, tail = time.partition('.')
     head = head.replace(':', '-')
     path = '../backups/backup-asset-'+head+'.csv'
-    data = []
     header = ['ID', 'assetName', 'deviceType', 'description', 'model', 'manufacturer', 'internalID', 'macAddress', 'ipAddress', 'physicalLocation', 'purchaseDate', 'warrantyInfo', 'notes', 'NISTKeywords']
-
-    for i in range(0, len(assetData)):
-        row = []
-        for j in range(len(assetData[i])):            
-            row.append(assetData[i][j])
-        data.append(row)
 
     with open(path, 'w', newline='') as f:
         writer = csv.writer(f)
         writer.writerow(header)
-        for i in range(len(data)):
-            writer.writerow(data[i])
+        
+        for i in range(0, len(assetData)):
+            row = []
+            for j in range(len(assetData[i])):            
+                row.append(assetData[i][j])
+            writer.writerow(row)
+
         f.close()
 
 
@@ -212,46 +210,28 @@ def updateItem(window):
     
     layout = [
             [pyGUI.Button('Return to Operations')],
-            [pyGUI.Text('Asset Update')],
-            [pyGUI.Text('Asset ID', size =(15, 1)), pyGUI.InputText()],
-            [pyGUI.Text('Asset Name', size =(15, 1)), pyGUI.InputText('Insert Asset ID', disabled=True)],
-            [pyGUI.Text('Device Type', size =(15, 1)), pyGUI.InputText('Insert Asset ID',disabled=True)],
-            [pyGUI.Text('Description', size =(15, 1)), pyGUI.InputText('Insert Asset ID', disabled=True)],
-            [pyGUI.Text('Model', size =(15, 1)), pyGUI.InputText('Insert Asset ID', disabled=True)],
-            [pyGUI.Text('Manufacturer', size =(15, 1)), pyGUI.InputText('Insert Asset ID', disabled=True)],
-            [pyGUI.Text('Internal ID', size =(15, 1)), pyGUI.InputText('Insert Asset ID', disabled=True)],
-            [pyGUI.Text('MAC Address', size =(15, 1)), pyGUI.InputText('Insert Asset ID', disabled=True)],
-            [pyGUI.Text('IP Address', size =(15, 1)), pyGUI.InputText('Insert Asset ID', disabled=True)],
-            [pyGUI.Text('Physical Location', size =(15, 1)), pyGUI.InputText('Insert Asset ID', disabled=True)],
-            [pyGUI.Text('Purchase Date', size =(15, 1)), pyGUI.InputText('Insert Asset ID', disabled=True)],
-            [pyGUI.Text('Warranty Information', size =(15, 1)), pyGUI.InputText('Insert Asset ID', disabled=True)],
-            [pyGUI.Text('Notes', size =(15, 1)), pyGUI.InputText('Insert Asset ID', disabled=True)],
-            [pyGUI.Button('Find Asset')],
+            [pyGUI.Text('Asset Find')],
+            [pyGUI.Text('Asset ID', size =(15, 1)), pyGUI.InputText(enable_events=True, key='-U_ID-')],
+            [pyGUI.Text('Asset Name', size =(15, 1)), pyGUI.InputText(enable_events=True, key='-U_NAME-', disabled=True)],
+            [pyGUI.Text('Device Type', size =(15, 1)), pyGUI.InputText(enable_events=True, key='-U_TYPE-', disabled=True)],
+            [pyGUI.Text('Description', size =(15, 1)), pyGUI.InputText(enable_events=True, key='-U_DESC-', disabled=True)],
+            [pyGUI.Text('Model', size =(15, 1)), pyGUI.InputText(enable_events=True, key='-U_MODEL-', disabled=True)],
+            [pyGUI.Text('Manufacturer', size =(15, 1)), pyGUI.InputText(enable_events=True, key='-U_MANU-', disabled=True)],
+            [pyGUI.Text('Internal ID', size =(15, 1)), pyGUI.InputText(enable_events=True, key='-U_INTERNAL_ID-', disabled=True)],
+            [pyGUI.Text('MAC Address', size =(15, 1)), pyGUI.InputText(enable_events=True, key='-U_MAC-', disabled=True)],
+            [pyGUI.Text('IP Address', size =(15, 1)), pyGUI.InputText(enable_events=True, key='-U_IP-', disabled=True)],
+            [pyGUI.Text('Physical Location', size =(15, 1)), pyGUI.InputText(enable_events=True, key='-U_LOC-', disabled=True)],
+            [pyGUI.Text('Purchase Date', size =(15, 1)), pyGUI.InputText(enable_events=True, key='-U_DATE-', disabled=True)],
+            [pyGUI.Text('Warranty Information', size =(15, 1)), pyGUI.InputText(enable_events=True, key='-U_WARRANTY-', disabled=True)],
+            [pyGUI.Text('Notes', size =(15, 1)), pyGUI.InputText(enable_events=True, key='-U_NOTES-', disabled=True)],
+            [pyGUI.Text('NIST Keywords (CSV)', font = 'ANY 8', size =(20, 1)), pyGUI.InputText(enable_events=True, key='-U_KEYWORDS-', disabled=True)],
+            [pyGUI.Button('Find Asset', key='-U_FIND-', visible = True)],
+            [pyGUI.Button('Update Asset', key='-U_UPDATE-', visible = False)],
+
         ]
     window = reloadFrame(window, layout)
     return window
     
-def updateItemShowData(window, vals):
-    layout = [
-            [pyGUI.Button('Return to Operations')],
-            [pyGUI.Text('Asset Update')],
-            [pyGUI.Text('Asset ID', size =(15, 1)), pyGUI.InputText(vals[0][0], disabled=True)],
-            [pyGUI.Text('Asset Name', size =(15, 1)), pyGUI.InputText(vals[0][1])],
-            [pyGUI.Text('Device Type', size =(15, 1)), pyGUI.InputText(vals[0][2])],
-            [pyGUI.Text('Description', size =(15, 1)), pyGUI.InputText(vals[0][3])],
-            [pyGUI.Text('Model', size =(15, 1)), pyGUI.InputText(vals[0][4])],
-            [pyGUI.Text('Manufacturer', size =(15, 1)), pyGUI.InputText(vals[0][5])],
-            [pyGUI.Text('Internal ID', size =(15, 1)), pyGUI.InputText(vals[0][6])],
-            [pyGUI.Text('MAC Address', size =(15, 1)), pyGUI.InputText(vals[0][7])],
-            [pyGUI.Text('IP Address', size =(15, 1)), pyGUI.InputText(vals[0][8])],
-            [pyGUI.Text('Physical Location', size =(15, 1)), pyGUI.InputText(vals[0][9])],
-            [pyGUI.Text('Purchase Date', size =(15, 1)), pyGUI.InputText(vals[0][10])],
-            [pyGUI.Text('Warranty Information', size =(15, 1)), pyGUI.InputText(vals[0][11])],
-            [pyGUI.Text('Notes', size =(15, 1)), pyGUI.InputText(vals[0][12])],
-            [pyGUI.Button('Update Asset')],
-        ]
-    window = reloadFrame(window, layout)
-    return window
 
 def displayItems(window, get):
 
@@ -274,7 +254,7 @@ def displayItems(window, get):
 
     layout = [
         [pyGUI.Button('Return to Operations')],
-        [pyGUI.Table(data, headings=['Asset ID', 'Name', 'Device Type', 'Description', 'Model', 'Manufacturer', 'Internal ID', 'MAC Address', 'IP Address', 'Physical Location', 'Purchase Date', 'Warranty Info', 'Notes'])],
+        [pyGUI.Table(data, vertical_scroll_only = False, headings=['Asset ID', 'Name', 'Device Type', 'Description', 'Model', 'Manufacturer', 'Internal ID', 'MAC Address', 'IP Address', 'Physical Location', 'Purchase Date', 'Warranty Info', 'Notes', 'NIST Keywords'])],
         [pyGUI.Button('Search entire table for vunerabilities')],
     ]
 

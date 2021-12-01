@@ -115,24 +115,64 @@ def main():
                 else:
                     window = deleteItem(window)
                     break
-        if event == 'Update Asset':
-            for c in values:
-                if values[c] != '':
-                    update(values)
-                    window = crudControls(window)
-                    break
-                else:
-                    window = updateItem(window)
-                    break
-        if event == 'Find Asset':
-            if values[0] != '':
-                data = getWhere(values[0])
-                if (data):
-                    window = updateItemShowData(window, data)
-                else:
-                    window = updateItem(window)      
-            else:
-                window = updateItem(window)
+                
+        updateCapHundred = ['-U_DESC-', '-U_WARRANTY-', '-U_NOTES-']
+        updateCapThirty = ['-U_NAME-', '-U_MODEL-', '-U_MANU-', '-U_LOC-']
+            
+        if '-U_UPDATE-' in window.AllKeysDict:
+            try:
+                for keys in updateCapHundred:
+                    if event == keys:
+                        if len(values[keys]) > 0:
+                            if len(values[keys]) > 100 or not regex.match('^[a-zA-Z0-9_-]+$', values[keys][-1]):
+                                window[keys].update(values[keys][:-1])
+                for keys in updateCapThirty:
+                    if event == keys:
+                        if len(values[keys]) > 0:
+                            if len(values[keys]) > 30 or not regex.match('^[a-zA-Z0-9_-]+$', values[keys][-1]):
+                                window[keys].update(values[keys][:-1])
+                if event == '-U_INTERNAL_ID-':
+                    if len(values['-U_INTERNAL_ID-']) > 0:
+                        if len(values['-U_INTERNAL_ID-']) > 10 or not regex.match('^[a-zA-Z0-9_-]+$', values['-U_INTERNAL_ID-'][-1]):
+                            window['-U_INTERNAL_ID-'].update(values['-U_INTERNAL_ID-'][:-1])
+                if event == '-U_MAC-':
+                    if len(values['-U_MAC-']) > 0:
+                        if len(values['-U_MAC-']) > 17 or not regex.match('^[a-zA-Z0-9]+$', values['-U_MAC-'][-1]):
+                            window['-U_MAC-'].update(values['-U_MAC-'][:-1])
+                if event == '-U_IP-':
+                    if len(values['-U_IP-']) > 0:
+                        if len(values['-U_IP-']) > 12 or not regex.match('^[0-9.]+$', values['-U_IP-'][-1]):
+                            window['-U_IP-'].update(values['-U_IP-'][:-1])
+                if event == '-U_DATE-':
+                    if len(values['-U_DATE-']) > 0:
+                        if len(values['-U_DATE-']) > 10 or not regex.match('^[0-9/-]+$', values['-U_DATE-'][-1]):
+                            window['-U_DATE-'].update(values['-U_DATE-'][:-1])
+                if event == '-U_KEYWORDS-':
+                    if len(values['-U_KEYWORDS-']) > 0:
+                        if not regex.match('^[a-zA-Z0-9,]+$', values['-U_KEYWORDS-'][-1]):
+                            window['-U_KEYWORDS-'].update(values['-U_KEYWORDS-'][:-1])
+            except:
+                pass
+                
+        if event == '-U_FIND-':
+            if len(values['-U_ID-']) > 0 or not regex.match('^[0-9]+$', values['-U_ID-'][-1]):
+                data = getWhere(values['-U_ID-'])
+                if data:
+                    i = 0
+                    for keys in values:
+                        window[keys].update(data[0][i], disabled=False)
+                        i+=1
+                    window['-U_FIND-'].update(visible = False)
+                    window['-U_UPDATE-'].update(visible = True)
+
+                    
+                
+
+
+        if event == '-U_ID-':
+             if len(values['-U_ID-']) > 0:
+                if not regex.match('^[0-9]+$', values['-U_ID-'][-1]):
+                    window['-U_ID-'].update(values['-U_ID-'][:-1])
                     
         if event == 'Display':
             window = displayItems(window, get())
@@ -178,7 +218,7 @@ def main():
                         if len(values['-C_DATE-']) > 10 or not regex.match('^[0-9/-]+$', values['-C_DATE-'][-1]):
                             window['-C_DATE-'].update(values['-C_DATE-'][:-1])
                 if event == '-C_KEYWORDS-':
-                    if len(values['-C_DATE-']) > 0:
+                    if len(values['-C_KEYWORDS-']) > 0:
                         if not regex.match('^[a-zA-Z0-9,]+$', values['-C_KEYWORDS-'][-1]):
                             window['-C_KEYWORDS-'].update(values['-C_KEYWORDS-'][:-1])
             except:
