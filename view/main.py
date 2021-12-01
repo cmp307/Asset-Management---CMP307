@@ -6,6 +6,7 @@ import threading
 
 sys.path.insert(1, '../model')
 sys.path.insert(1, '../controller')
+sys.path.insert(1, '../backups')
 
 from SQL import create_asset, get, update, delete, getWhere
 from interfaces import *
@@ -98,6 +99,8 @@ def main():
             window = updateItem(window)
         if event == 'Delete':
             window = deleteItem(window)
+        if event == 'Vulnerability Search':
+            window = vulsearch(window, get())
             
         if event == 'Delete Asset':
             for c in values:
@@ -147,43 +150,63 @@ def main():
         createCapThirty = ['-C_NAME-', '-C_MODEL-', '-C_MANU-', '-C_LOC-']
         
         if '-CREATION-' in window.AllKeysDict:
-            for keys in createCapHundred:
-                if event == keys:
-                    if len(values[keys]) > 0:
-                        if len(values[keys]) > 100 or not regex.match('^[a-zA-Z0-9_-]+$', values[keys][-1]):
-                            window[keys].update(values[keys][:-1])
-            for keys in createCapThirty:
-                if event == keys:
-                    if len(values[keys]) > 0:
-                        if len(values[keys]) > 30 or not regex.match('^[a-zA-Z0-9_-]+$', values[keys][-1]):
-                            window[keys].update(values[keys][:-1])
-            if event == '-C_INTERNAL_ID-':
-                if len(values['-C_INTERNAL_ID-']) > 0:
-                    if len(values['-C_INTERNAL_ID-']) > 10 or not regex.match('^[a-zA-Z0-9_-]+$', values['-C_INTERNAL_ID-'][-1]):
-                        window['-C_INTERNAL_ID-'].update(values['-C_INTERNAL_ID-'][:-1])
-            if event == '-C_MAC-':
-                if len(values['-C_MAC-']) > 0:
-                    if len(values['-C_MAC-']) > 17 or not regex.match('^[a-zA-Z0-9]+$', values['-C_MAC-'][-1]):
-                        window['-C_MAC-'].update(values['-C_MAC-'][:-1])
-            if event == '-C_IP-':
-                if len(values['-C_IP-']) > 0:
-                    if len(values['-C_IP-']) > 12 or not regex.match('^[0-9.]+$', values['-C_IP-'][-1]):
-                        window['-C_IP-'].update(values['-C_IP-'][:-1])
-            if event == '-C_DATE-':
-                if len(values['-C_DATE-']) > 0:
-                    if len(values['-C_DATE-']) > 10 or not regex.match('^[0-9/-]+$', values['-C_DATE-'][-1]):
-                        window['-C_DATE-'].update(values['-C_DATE-'][:-1])
-            if event == '-C_KEYWORDS-':
-                    if not regex.match('^[a-zA-Z0-9]+$', values['-C_KEYWORDS-'][-1]):
-                        window['-C_KEYWORDS-'].update(values['-C_KEYWORDS-'][:-1])
+            try:
+                for keys in createCapHundred:
+                    if event == keys:
+                        if len(values[keys]) > 0:
+                            if len(values[keys]) > 100 or not regex.match('^[a-zA-Z0-9_-]+$', values[keys][-1]):
+                                window[keys].update(values[keys][:-1])
+                for keys in createCapThirty:
+                    if event == keys:
+                        if len(values[keys]) > 0:
+                            if len(values[keys]) > 30 or not regex.match('^[a-zA-Z0-9_-]+$', values[keys][-1]):
+                                window[keys].update(values[keys][:-1])
+                if event == '-C_INTERNAL_ID-':
+                    if len(values['-C_INTERNAL_ID-']) > 0:
+                        if len(values['-C_INTERNAL_ID-']) > 10 or not regex.match('^[a-zA-Z0-9_-]+$', values['-C_INTERNAL_ID-'][-1]):
+                            window['-C_INTERNAL_ID-'].update(values['-C_INTERNAL_ID-'][:-1])
+                if event == '-C_MAC-':
+                    if len(values['-C_MAC-']) > 0:
+                        if len(values['-C_MAC-']) > 17 or not regex.match('^[a-zA-Z0-9]+$', values['-C_MAC-'][-1]):
+                            window['-C_MAC-'].update(values['-C_MAC-'][:-1])
+                if event == '-C_IP-':
+                    if len(values['-C_IP-']) > 0:
+                        if len(values['-C_IP-']) > 12 or not regex.match('^[0-9.]+$', values['-C_IP-'][-1]):
+                            window['-C_IP-'].update(values['-C_IP-'][:-1])
+                if event == '-C_DATE-':
+                    if len(values['-C_DATE-']) > 0:
+                        if len(values['-C_DATE-']) > 10 or not regex.match('^[0-9/-]+$', values['-C_DATE-'][-1]):
+                            window['-C_DATE-'].update(values['-C_DATE-'][:-1])
+                if event == '-C_KEYWORDS-':
+                    if len(values['-C_DATE-']) > 0:
+                        if not regex.match('^[a-zA-Z0-9,]+$', values['-C_KEYWORDS-'][-1]):
+                            window['-C_KEYWORDS-'].update(values['-C_KEYWORDS-'][:-1])
+            except:
+                pass
 
             
                 
-        if event == 'Check entire table for vunerabilities':
+        if event == 'Search entire table for vunerabilities':
         
             a = threading.Thread(target=vunerabilityAPICall).start()
             window = reloadFrame(window, loadingFrame())
 
+        if event == 'S_ASSET_ID_INPUT':
+             if len(values['-S_ASSET_ID_INPUT-']) > 0:
+                if not regex.match('^[0-9]+$', values['-S_ASSET_ID_INPUT-'][-1]):
+                    window['-S_ASSET_ID_INPUT-'].update(values['-S_ASSET_ID_INPUT-'][:-1])
+
+        if event == 'Search for vunerabilities by Asset ID':
+            window['-S_ASSET_ID_INPUT-'].update(visible=True)
+            window['-S_ASSET_ID_TEXT-'].update(visible=True)
+            window['-S_ASSET_ID_SUBMIT-'].update(visible=True)
+
+        if event == '-S_ASSET_ID_SUBMIT-':
+            print(getWhere(values['-S_ASSET_ID_INPUT-']))
+        
+        if event == 'Backup':
+            backup(get())
+                   
         if event == 'Return to display':
 
             loaded = False

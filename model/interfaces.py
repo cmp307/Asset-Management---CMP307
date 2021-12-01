@@ -6,11 +6,53 @@ from SQL import userVerify
 from hashlib import md5
 from vunerability import *
 import re as regex
+import csv
+import datetime
 
 def getCenterScreen():
     user32 = windll.user32
     screensize = floor(user32.GetSystemMetrics(0) / 2) * 2, floor(user32.GetSystemMetrics(1) / 2) * 2
     return screensize
+
+def backup(assetData):
+    
+    time = str(datetime.datetime.now())
+    head, sep, tail = time.partition('.')
+    head = head.replace(':', '-')
+    path = '../backups/backup-asset-'+head+'.csv'
+    data = []
+    header = ['ID', 'assetName', 'deviceType', 'description', 'model', 'manufacturer', 'internalID', 'macAddress', 'ipAddress', 'physicalLocation', 'purchaseDate', 'warrantyInfo', 'notes', 'NISTKeywords']
+
+    for i in range(0, len(assetData)):
+        row = []
+        for j in range(len(assetData[i])):            
+            row.append(assetData[i][j])
+        data.append(row)
+
+    with open(path, 'w', newline='') as f:
+        writer = csv.writer(f)
+        writer.writerow(header)
+        for i in range(len(data)):
+            writer.writerow(data[i])
+        f.close()
+
+
+    
+    layout = [  [pyGUI.Text('Asset and Software placed in /backups', font='ANY 10')],
+                [pyGUI.Button('Close')],
+            ]
+    
+    window = pyGUI.Window("Backup Confirmation", layout, size = (400,100), background_color="grey80", element_justification='c')
+ 
+    while True:
+        event, values = window.Read(timeout=25)
+        if event in (None, 'Exit', 'Cancel'):
+            break
+        if event == 'Close':
+            window.close()
+            break
+
+
 
 def createWindow(layout):
     global windowSize
@@ -91,14 +133,35 @@ def init():
 def crudControls(window):
         layout = [
             [pyGUI.Image('scottishGlenLogo.png', background_color="grey80")],
-            [pyGUI.Button('Display'), pyGUI.Button('Create')],
-            [pyGUI.Button('Update'), pyGUI.Button('Delete')],
-            [pyGUI.Button('Backup')],
+            [pyGUI.Button('Display', size=(10,1)), pyGUI.Button('Create', size=(10,1))],
+            [pyGUI.Button('Update',size=(10,1)), pyGUI.Button('Delete', size=(10,1))],
+            [pyGUI.Button('Backup'), pyGUI.Button('Vulnerability Search')],
         ]
         window = reloadFrame(window, layout)
         return window
 
+def vulsearch(window, get):
+        global toSearch
+        
+        toSearch = []
 
+        for i in range(0, len(get)):
+            for j in range(len(get[i])):     
+                if (j==13):
+                    if (get[i][j] != ""):
+                       toSearch.append(get[i][j])
+                   
+        layout = [
+            [pyGUI.Image('scottishGlenLogo.png', background_color="grey80")],
+            [pyGUI.Button('Search entire table for vunerabilities')],
+            [pyGUI.Button('Search for vunerabilities by Asset ID')],
+            [pyGUI.InputText(enable_events=True, key='-S_ASSET_ID_INPUT-', visible = False), pyGUI.Text('Enter Asset ID', size =(15, 1), enable_events=True, key='-S_ASSET_ID_TEXT-', visible = False)],
+            [pyGUI.Button('Submit', key='-S_ASSET_ID_SUBMIT-', visible=False)],
+            [pyGUI.Button('Search for vunerabilities by keyword')],
+        ]
+        
+        window = reloadFrame(window, layout)
+        return window
     
 def verifyLogin(window, username, password):
 
@@ -126,7 +189,7 @@ def createItem(window):
             [pyGUI.Text('Buy Date (dd/mm/yyyy)',font='ANY 8', size =(20, 1)), pyGUI.InputText(enable_events=True, key='-C_DATE-')],
             [pyGUI.Text('Warranty Information', size = (15, 1)), pyGUI.Multiline(size=(43, 5), key='-C_WARRANTY-', enable_events=True)],
             [pyGUI.Text('Notes', size = (15, 1)), pyGUI.Multiline(size=(43, 5), key='-C_NOTES-', enable_events=True)],
-            [pyGUI.Text('NIST Keywords', size =(15, 1)), pyGUI.InputText(enable_events=True, key='-C_KEYWORDS-')],
+            [pyGUI.Text('NIST Keywords (CSV)', font = 'ANY 8', size = (20, 1)), pyGUI.Multiline(size=(43, 5), key='-C_KEYWORDS-', enable_events=True)],
             [pyGUI.Button('Create Asset', bind_return_key = True)],
         ]
     
@@ -202,8 +265,9 @@ def displayItems(window, get):
         row = []
         for j in range(len(get[i])):
             
-            if (j==3):
-               toSearch.append(get[i][j])
+            if (j==13):
+                if (get[i][j] != ""):
+                   toSearch.append(get[i][j])
                
             row.append(get[i][j])
         data.append(row)
@@ -211,7 +275,7 @@ def displayItems(window, get):
     layout = [
         [pyGUI.Button('Return to Operations')],
         [pyGUI.Table(data, headings=['Asset ID', 'Name', 'Device Type', 'Description', 'Model', 'Manufacturer', 'Internal ID', 'MAC Address', 'IP Address', 'Physical Location', 'Purchase Date', 'Warranty Info', 'Notes'])],
-        [pyGUI.Button('Check entire table for vunerabilities')],
+        [pyGUI.Button('Search entire table for vunerabilities')],
     ]
 
     window = reloadFrame(window, layout)
