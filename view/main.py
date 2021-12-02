@@ -66,7 +66,7 @@ def main():
     global toSearch
     
     window = init()
-    window = crudControls(window)
+    #window = crudControls(window)
     while True:
             
         event, values = window.read()
@@ -98,7 +98,8 @@ def main():
                 window['-D_INVALID-'].update(visible=True)
                 
             
-
+        if event == 'Log Out':
+            window = init()
                 
         updateCapHundred = ['-U_DESC-', '-U_WARRANTY-', '-U_NOTES-']
         updateCapThirty = ['-U_NAME-', '-U_MODEL-', '-U_MANU-', '-U_LOC-']

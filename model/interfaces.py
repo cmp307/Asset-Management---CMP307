@@ -9,6 +9,8 @@ import re as regex
 import csv
 import datetime
 
+access = False
+
 def getCenterScreen():
     user32 = windll.user32
     screensize = floor(user32.GetSystemMetrics(0) / 2) * 2, floor(user32.GetSystemMetrics(1) / 2) * 2
@@ -129,14 +131,25 @@ def init():
     return window
 
 def crudControls(window):
+    global access
+    if access[0][0]:
         layout = [
             [pyGUI.Image('scottishGlenLogo.png', background_color="grey80")],
             [pyGUI.Button('Display', size=(10,1)), pyGUI.Button('Create', size=(10,1))],
             [pyGUI.Button('Update',size=(10,1)), pyGUI.Button('Delete', size=(10,1))],
             [pyGUI.Button('Backup'), pyGUI.Button('Vulnerability Search')],
+            [pyGUI.Button('Log Out', size=(10,1))],
+
         ]
-        window = reloadFrame(window, layout)
-        return window
+        
+    else:
+        layout = [
+            [pyGUI.Image('scottishGlenLogo.png', background_color="grey80")],
+            [pyGUI.Button('Display', size=(10,1)), pyGUI.Button('Log Out',  size=(10,1))],
+        ]
+            
+    window = reloadFrame(window, layout)
+    return window
 
 def vulsearch(window, get):
         global toSearch
@@ -165,12 +178,15 @@ def vulsearch(window, get):
     
 def verifyLogin(window, username, password):
 
+    global access
 
-    if (userVerify(username, md5(password.encode()).hexdigest())):
+    access = userVerify(username, md5(password.encode()).hexdigest())
+    if (access):
         window = crudControls(window)
     else:
         window.Element('-INCORRECT_LOGIN-').Update(visible=True)
-        
+
+
     return window
     
 def createItem(window):
