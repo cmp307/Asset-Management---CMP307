@@ -8,7 +8,7 @@ sys.path.insert(1, '../model')
 sys.path.insert(1, '../controller')
 sys.path.insert(1, '../backups')
 
-from SQL import create_asset, get, update, delete, getWhere
+from SQL import *
 from interfaces import *
 
 
@@ -67,6 +67,7 @@ def main():
     
     window = init()
     #window = crudControls(window)
+    window = displayItems(window, getAsset(), getSoftware())
     while True:
             
         event, values = window.read()
@@ -83,17 +84,16 @@ def main():
         if event == 'Delete':
             window = deleteItem(window)
         if event == 'Vulnerability Search':
-            window = vulsearch(window, get())
+            window = vulsearch(window, getAsset())
             
         if event == '-D_ID-':
             if len(values['-D_ID-']) > 0 and not regex.match('^[0-9]+$', values['-D_ID-'][-1]):
                 window['-D_ID-'].update(values['-D_ID-'][:-1])
                     
         if event == 'Delete Asset':
-            result = delete(values)
-            print(result)
+            result = deleteAsset(values)
             if (result):
-                window = displayItems(window, get())
+                window = displayItems(window, getAsset(), getSoftware())
             else:
                 window['-D_INVALID-'].update(visible=True)
                 
@@ -101,17 +101,17 @@ def main():
         if event == 'Log Out':
             window = init()
                 
-        updateCapHundred = ['-U_DESC-', '-U_WARRANTY-', '-U_NOTES-']
-        updateCapThirty = ['-U_NAME-', '-U_MODEL-', '-U_MANU-', '-U_LOC-']
+        updateAssetCapHundred = ['-U_DESC-', '-U_WARRANTY-', '-U_NOTES-']
+        updateAssetCapThirty = ['-U_NAME-', '-U_MODEL-', '-U_MANU-', '-U_LOC-']
             
         if '-U_UPDATE-' in window.AllKeysDict:
             try:
-                for keys in updateCapHundred:
+                for keys in updateAssetCapHundred:
                     if event == keys:
                         if len(values[keys]) > 0:
                             if len(values[keys]) > 100 or not regex.match('^[a-zA-Z0-9_-]+$', values[keys][-1]):
                                 window[keys].update(values[keys][:-1])
-                for keys in updateCapThirty:
+                for keys in updateAssetCapThirty:
                     if event == keys:
                         if len(values[keys]) > 0:
                             if len(values[keys]) > 30 or not regex.match('^[a-zA-Z0-9_-]+$', values[keys][-1]):
@@ -142,7 +142,7 @@ def main():
                 
         if event == '-U_FIND-':
             if len(values['-U_ID-']) > 0 or not regex.match('^[0-9]+$', values['-U_ID-'][-1]):
-                data = getWhere(values['-U_ID-'])
+                data = getAssetWhere(values['-U_ID-'])
                 if data:
                     i = 0
                     for keys in values:
@@ -156,8 +156,8 @@ def main():
                    window['-U_INVALID-'].update(visible = True)
 
         if event == '-U_UPDATE-':
-            update(values)
-            window = displayItems(window, get())
+            updateAsset(values)
+            window = displayItems(window, getAsset(), getSoftware())
             
                     
                 
@@ -169,15 +169,15 @@ def main():
                     window['-U_ID-'].update(values['-U_ID-'][:-1])
                     
         if event == 'Display':
-            window = displayItems(window, get())
+            window = displayItems(window, getAsset(), getSoftware())
             
         if event == 'Create Asset':
            MAC_Sanitisied = regex.sub('/[^\d|A-Z]/g', '', values['-C_MAC-'].upper())
            MAC_Split = [MAC_Sanitisied[i:i+2] for i in range(0, len(MAC_Sanitisied), 2)]
            window['-C_MAC-'].update(":".join(MAC_Split))
            
-           create_asset(values)
-           window = displayItems(window, get())
+           createAsset(values)
+           window = displayItems(window, getAsset(),getSoftware())
            
 
         createCapHundred = ['-C_DESCRIPTION-', '-C_WARRANTY-', '-C_NOTES-']
@@ -237,7 +237,7 @@ def main():
 
 
         if event == '-S_ASSET_ID_SUBMIT-':
-            keywords = getWhere(values['-S_ASSET_ID_INPUT-'])
+            keywords = getAssetWhere(values['-S_ASSET_ID_INPUT-'])
             if keywords[0][13] != "":
                 setAPIVals(keywords[0][13])
                 layout = checkVun(window)
@@ -248,12 +248,12 @@ def main():
                 
         
         if event == 'Backup':
-            backup(get())
+            backup(getAsset())
                    
         if event == 'Return to display':
 
             loaded = False
-            window = displayItems(window, get())
+            window = displayItems(window, getAsset(), getSoftware())
 
         initCapTen = ['-USERNAME-', '-PASSWORD-']
 
@@ -268,7 +268,7 @@ def main():
         if event == '-LOGIN-':                                              #if login button is pressed
             if len(values['-USERNAME-']) and len(values['-PASSWORD-']) > 0:                     #check not empty
                 loginResult = verifyLogin(window, values['-USERNAME-'], values['-PASSWORD-'])   #validate login
-                if (loginResult != window):                                 #update window accordingly
+                if (loginResult != window):                                 #updateAsset window accordingly
                     window = loginResult
 
 

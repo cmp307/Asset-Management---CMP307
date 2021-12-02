@@ -1,0 +1,4 @@
+ID,assetName,deviceType,description,model,manufacturer,internalID,macAddress,ipAddress,physicalLocation,purchaseDate,warrantyInfo,notes,NISTKeywords
+39,dd-srv-ex2,Server,ThinkSystem SR630 Server,7X02A0F4EA,Lenovo,S12770,00:59:07:C2:9E:91,54.221.192.241,"Room 1250, Kydd Building",15/01/2018,3-year on-site,Primary Exchange server,
+40,ddkcyb-ophoffj-lt,Computer,HP EliteBook 830 G6,4WE12AV,Hewlett-Packard,L19874,E8:D8:D1:3C:0B:B6,,"Room 2301, Kydd Building",20/11/2019,1-year,Laptop for J Ophoff,
+56,NJF,Portable,Big man nath,aa,aaa,aaa,aaaa,2222233333,adadadadawdwa,//////////,dfada,daadafa,Bluetooth

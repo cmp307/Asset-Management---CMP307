@@ -67,53 +67,7 @@ def reloadFrame(window, layout):
     window = createWindow(layout)
     return window
 
-def individualVunSearch(val, window):
-    data = []
 
-    rowCount, desc, rating = format(vunerabilitySearch(val.replace(" ", "+")))
-    row = []
-    ratingValue = []
-        
-    if rowCount > 0:
-        row.append(val + ' ' + 'has ' + str(rowCount) + ' vunerabilities')
-            
-    for counter in rating:
-        match counter:
-            case "no rating avaliable":
-                ratingValue.append(0)
-            case "LOW":
-                ratingValue.append(1)
-            case "MEDIUM":
-                ratingValue.append(2)
-            case 'HIGH':
-                ratingValue.append(3)
-            case 'CRITICAL':
-                ratingValue.append(4)
-                        
-
-    n = len(ratingValue)
-    for i in range(n-1):
-        for j in range(0, n-i-1):
-            if ratingValue[j] < ratingValue[j + 1] :
-                ratingValue[j], ratingValue[j + 1] = ratingValue[j + 1], ratingValue[j]
-                rating[j], rating[j + 1] = rating[j + 1], rating[j]
-                desc[j], desc[j + 1] = desc[j + 1], desc[j]
-
-                        
-                    
-    for j in range(rowCount):            
-        row.append('Severity Level: ' + rating[j] + ' Description:' + desc[j])
-    data.append(row)
-
-    layout = [
-        [pyGUI.Button('Create the Asset')],
-        [pyGUI.Button('Discard the Asset')],
-    ]
-
-    for c in range(len(data)):
-        layout.append([pyGUI.Listbox(values=(data[c]), size=(100,10), horizontal_scroll=True)])
-   
-    return layout
     
 def init():
     
@@ -253,28 +207,39 @@ def updateItem(window):
     return window
     
 
-def displayItems(window, get):
+def displayItems(window, getAsset, getSoftware):
 
     global toSearch
     
-    data = []
-
+    physicalAsset = []
+    softwareAsset = []
+    
     toSearch = []
 
-    for i in range(0, len(get)):
+    for i in range(0, len(getAsset)):
         row = []
-        for j in range(len(get[i])):
-            
+        for j in range(len(getAsset[i])):
             if (j==13):
-                if (get[i][j] != ""):
-                   toSearch.append(get[i][j])
+                if (getAsset[i][j] != ""):
+                   toSearch.append(getAsset[i][j])
                
-            row.append(get[i][j])
-        data.append(row)
+            row.append(getAsset[i][j])
+        physicalAsset.append(row)
+
+    for i in range(0, len(getSoftware)):
+        row = []
+        for j in range(len(getSoftware[i])):
+            if (j==10):
+                if (getSoftware[i][j] != ""):
+                   toSearch.append(getSoftware[i][j])
+               
+            row.append(getSoftware[i][j])
+        softwareAsset.append(row)
 
     layout = [
         [pyGUI.Button('Return to Operations')],
-        [pyGUI.Table(data, vertical_scroll_only = False, headings=['Asset ID', 'Name', 'Device Type', 'Description', 'Model', 'Manufacturer', 'Internal ID', 'MAC Address', 'IP Address', 'Physical Location', 'Purchase Date', 'Warranty Info', 'Notes', 'NIST Keywords'])],
+        [pyGUI.Table(physicalAsset, vertical_scroll_only = False, headings=['Asset ID', 'Name', 'Device Type', 'Description', 'Model', 'Manufacturer', 'Internal ID', 'MAC Address', 'IP Address', 'Physical Location', 'Purchase Date', 'Warranty Info', 'Notes', 'NIST Keywords'])],
+        [pyGUI.Table(softwareAsset, vertical_scroll_only = False, headings=['Software ID', 'Name', 'Type', 'Description', 'Version', 'Developer', 'License', 'Key', 'Date Purchased', 'Notes', 'NIST Keywords'])],
         [pyGUI.Button('Search entire table for vunerabilities')],
     ]
 
@@ -290,56 +255,72 @@ def checkVun(window):
     global toSearch
     data = []
 
-    for i in range(0, len(toSearch)):
-        rowCount, desc, rating = format(vunerabilitySearch(toSearch[i].replace(" ", "+")))
-        row = []
-        ratingValue = []
-        
-        if rowCount > 0:
-            row.append(toSearch[i] + ' ' + 'has ' + str(rowCount) + ' vunerabilities')
+    if len(toSearch) > 0:
+        for i in range(0, len(toSearch)):
+            rowCount, desc, rating = format(vunerabilitySearch(toSearch[i].replace(" ", "+")))
+            row = []
+            ratingValue = []
             
-            for counter in rating:
-                match counter:
-                    case "no rating avaliable":
-                        ratingValue.append(0)
-                    case "LOW":
-                        ratingValue.append(1)
-                    case "MEDIUM":
-                        ratingValue.append(2)
-                    case 'HIGH':
-                        ratingValue.append(3)
-                    case 'CRITICAL':
-                        ratingValue.append(4)
+            if rowCount > 0:
+                row.append(toSearch[i] + ' ' + 'has ' + str(rowCount) + ' vunerability(s)')
+                
+                for counter in rating:
+                    match counter:
+                        case "no rating avaliable":
+                            ratingValue.append(0)
+                        case "LOW":
+                            ratingValue.append(1)
+                        case "MEDIUM":
+                            ratingValue.append(2)
+                        case 'HIGH':
+                            ratingValue.append(3)
+                        case 'CRITICAL':
+                            ratingValue.append(4)
+                            
+
+                n = len(ratingValue)
+                for i in range(n-1):
+                    for j in range(0, n-i-1):
+                        if ratingValue[j] < ratingValue[j + 1] :
+                            ratingValue[j], ratingValue[j + 1] = ratingValue[j + 1], ratingValue[j]
+                            rating[j], rating[j + 1] = rating[j + 1], rating[j]
+                            desc[j], desc[j + 1] = desc[j + 1], desc[j]
+
+                            
                         
+                for j in range(rowCount):            
+                    row.append('Severity Level: ' + rating[j] + ' Description:' + desc[j])
+                data.append(row)
+    else:
+        row = []
+        row.append('No Keywords Provided')
+        data.append(row)
 
-            n = len(ratingValue)
-            for i in range(n-1):
-                for j in range(0, n-i-1):
-                    if ratingValue[j] < ratingValue[j + 1] :
-                        ratingValue[j], ratingValue[j + 1] = ratingValue[j + 1], ratingValue[j]
-                        rating[j], rating[j + 1] = rating[j + 1], rating[j]
-                        desc[j], desc[j + 1] = desc[j + 1], desc[j]
-
-                        
-                    
-            for j in range(rowCount):            
-                row.append('Severity Level: ' + rating[j] + ' Description:' + desc[j])
-            data.append(row)
-
+    
 
     
 
         
 
-    layout = [
+    a = [
         [pyGUI.Button('Return to display')],
     ]
 
     for c in range(len(data)):
-        layout.append([pyGUI.Listbox(values=(data[c]), size=(50,10), horizontal_scroll=True)])
+        a.append([pyGUI.Listbox(values=(data[c]), size=(100,10), horizontal_scroll=True)])
 
+
+    x = floor(windll.user32.GetSystemMetrics(0) / 2) * 2
+    y = floor(windll.user32.GetSystemMetrics(0) / 2) 
     
-    
+    layout = [
+        [
+            pyGUI.Column(a, scrollable=True,  size=(x,y), vertical_scroll_only=False),
+        ]
+    ]
+
+
+            
     return layout
 
 
