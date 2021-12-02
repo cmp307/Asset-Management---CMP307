@@ -6,4 +6,5 @@ installLibs.py is on the root of the repo and will install pysimplegui and mysql
 
 view/main.py will start the app.
 
-login: username: admin           password: admin
+admin all: username-admin_all password- admin_all
+only report: username-report password-report
