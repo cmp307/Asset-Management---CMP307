@@ -43,15 +43,16 @@ def getWhere(id):
 
 def update(formData):
     conn, mydb = connectToDatabase()
-    sqlString = "update cmp307data SET assetName = %s, deviceType = %s, description = %s, model = %s, manufacturer = %s, internalID = %s, macAddress = %s, ipAddress = %s, physicalLocation = %s, purchaseDate = %s, warrantyInfo = %s, notes = %s WHERE assetID = %s"
-    conn.execute(sqlString, (formData[1], formData[2], formData[3], formData[4], formData[5], formData[6], formData[7], formData[8], formData[9], formData[10], formData[11], formData[12], formData[0]))
+    sqlString = "update cmp307data SET assetName = %s, deviceType = %s, description = %s, model = %s, manufacturer = %s, internalID = %s, macAddress = %s, ipAddress = %s, physicalLocation = %s, purchaseDate = %s, warrantyInfo = %s, notes = %s , NISTKeywords = %s WHERE assetID = %s"
+    conn.execute(sqlString, (formData['-U_NAME-'], formData['-U_TYPE-'], formData['-U_DESC-'], formData['-U_MODEL-'], formData['-U_MANU-'], formData['-U_INTERNAL_ID-'], formData['-U_MAC-'], formData['-U_IP-'], formData['-U_LOC-'], formData['-U_DATE-'], formData['-U_WARRANTY-'], formData['-U_NOTES-'], formData['-U_KEYWORDS-'], formData['-U_ID-']))
     mydb.commit()
 
 def delete(formData):
     conn, mydb = connectToDatabase()
     sqlString = "delete from cmp307data WHERE assetID = %s"
-    conn.execute(sqlString, (formData[0],))
+    conn.execute(sqlString, (formData['-D_ID-'],))
     mydb.commit()
+    return conn.rowcount
 
 def backup():
     conn, mydb = connectToDatabase()

@@ -45,24 +45,7 @@ def loadingFrame():
 
     
 
-    
-def checkSpecial(val):
 
-    i = 0
-    values = []
-    
-    for c in val:
-        values.append(val[c])
-        i+=1
-    i = 0
-
-    for c in values:
-        regexp = regex.compile('[^0-9a-zA-Z]+')
-        if regexp.search(values[i]):
-            return False
-        i+=1
-     
-    return True
 
 def vunerabilityAPICall():
     global window
@@ -102,19 +85,20 @@ def main():
         if event == 'Vulnerability Search':
             window = vulsearch(window, get())
             
+        if event == '-D_ID-':
+            if len(values['-D_ID-']) > 0 and not regex.match('^[0-9]+$', values['-D_ID-'][-1]):
+                window['-D_ID-'].update(values['-D_ID-'][:-1])
+                    
         if event == 'Delete Asset':
-            for c in values:
-                if values[c] != '':
-                   if not (checkSpecial(values)):
-                        window = deleteItem(window)
-                        break
-                   else:
-                        delete(values)
-                        window = crudControls(window)
-                        break
-                else:
-                    window = deleteItem(window)
-                    break
+            result = delete(values)
+            print(result)
+            if (result):
+                window = displayItems(window, get())
+            else:
+                window['-D_INVALID-'].update(visible=True)
+                
+            
+
                 
         updateCapHundred = ['-U_DESC-', '-U_WARRANTY-', '-U_NOTES-']
         updateCapThirty = ['-U_NAME-', '-U_MODEL-', '-U_MANU-', '-U_LOC-']
@@ -153,6 +137,7 @@ def main():
                             window['-U_KEYWORDS-'].update(values['-U_KEYWORDS-'][:-1])
             except:
                 pass
+     
                 
         if event == '-U_FIND-':
             if len(values['-U_ID-']) > 0 or not regex.match('^[0-9]+$', values['-U_ID-'][-1]):
@@ -162,9 +147,17 @@ def main():
                     for keys in values:
                         window[keys].update(data[0][i], disabled=False)
                         i+=1
+                    window['-U_INVALID-'].update(visible = False)
+                    window['-U_ID-'].update(disabled=True)
                     window['-U_FIND-'].update(visible = False)
                     window['-U_UPDATE-'].update(visible = True)
+                else:
+                   window['-U_INVALID-'].update(visible = True)
 
+        if event == '-U_UPDATE-':
+            update(values)
+            window = displayItems(window, get())
+            
                     
                 
 
@@ -183,7 +176,7 @@ def main():
            window['-C_MAC-'].update(":".join(MAC_Split))
            
            create_asset(values)
-
+           window = displayItems(window, get())
            
 
         createCapHundred = ['-C_DESCRIPTION-', '-C_WARRANTY-', '-C_NOTES-']

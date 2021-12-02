@@ -151,6 +151,7 @@ def vulsearch(window, get):
                    
         layout = [
             [pyGUI.Image('scottishGlenLogo.png', background_color="grey80")],
+            [pyGUI.Button('Return to Operations')],
             [pyGUI.Button('Search entire table for vunerabilities')],
             [pyGUI.Button('Search for vunerabilities by Asset ID')],
             [pyGUI.InputText(enable_events=True, key='-S_ASSET_ID_INPUT-', visible = False), pyGUI.Text('Enter Asset ID', size =(15, 1), enable_events=True, key='-S_ASSET_ID_TEXT-', visible = False)],
@@ -177,7 +178,7 @@ def createItem(window):
             [pyGUI.Button('Return to Operations')],
             [pyGUI.Text('Asset Creation', key='-CREATION-')],
             [pyGUI.Text('Asset Name', size =(15, 1)), pyGUI.InputText(enable_events=True, key='-C_NAME-')],
-            [pyGUI.Text('Device Type', size = (15, 1)), pyGUI.Combo(values=['Network', 'Physical'], size=(43, 1), readonly=True, key='-C_TYPE-', enable_events=True)],
+            [pyGUI.Text('Device Type', size = (15, 1)), pyGUI.Combo(values=['Portable', 'Mobile', 'Network', 'Non-Computing', 'IOT', 'Other'], size=(43, 1), readonly=True, key='-C_TYPE-', enable_events=True)],
             [pyGUI.Text('Description', size = (15, 1)), pyGUI.Multiline(size=(43, 5), key='-C_DESCRIPTION-', enable_events=True)],
             [pyGUI.Text('Model', size =(15, 1)), pyGUI.InputText(enable_events=True, key='-C_MODEL-')],
             [pyGUI.Text('Manufacturer', size =(15, 1)), pyGUI.InputText(enable_events=True, key='-C_MANU-')],
@@ -200,8 +201,9 @@ def deleteItem(window):
     layout = [
             [pyGUI.Button('Return to Operations')],
             [pyGUI.Text('Asset Delete')],
-            [pyGUI.Text('Asset ID', size =(15, 1)), pyGUI.InputText()],
+            [pyGUI.Text('Asset ID', size =(15, 1)), pyGUI.InputText(enable_events=True, key='-D_ID-')],
             [pyGUI.Button('Delete Asset', bind_return_key = True)],
+            [pyGUI.Text('Invalid Asset ID', size =(15, 1), key='-D_INVALID-', enable_events=True, visible = False)],
         ]
     window = reloadFrame(window, layout)
     return window
@@ -214,8 +216,8 @@ def updateItem(window):
             [pyGUI.Text('Asset Find')],
             [pyGUI.Text('Asset ID', size =(15, 1)), pyGUI.InputText(enable_events=True, key='-U_ID-')],
             [pyGUI.Text('Asset Name', size =(15, 1)), pyGUI.InputText(enable_events=True, key='-U_NAME-', disabled=True)],
-            [pyGUI.Text('Device Type', size =(15, 1)), pyGUI.InputText(enable_events=True, key='-U_TYPE-', disabled=True)],
-            [pyGUI.Text('Description', size =(15, 1)), pyGUI.InputText(enable_events=True, key='-U_DESC-', disabled=True)],
+            [pyGUI.Text('Device Type', size = (15, 1)), pyGUI.Combo(values=['Portable', 'Mobile', 'Network', 'Non-Computing', 'IOT', 'Other'], size=(43, 1), readonly=True, key='-U_TYPE-', enable_events=True, disabled=True)],
+            [pyGUI.Text('Description', size = (15, 1)), pyGUI.Multiline(size=(43, 5), key='-U_DESC-', disabled=True, enable_events=True)],
             [pyGUI.Text('Model', size =(15, 1)), pyGUI.InputText(enable_events=True, key='-U_MODEL-', disabled=True)],
             [pyGUI.Text('Manufacturer', size =(15, 1)), pyGUI.InputText(enable_events=True, key='-U_MANU-', disabled=True)],
             [pyGUI.Text('Internal ID', size =(15, 1)), pyGUI.InputText(enable_events=True, key='-U_INTERNAL_ID-', disabled=True)],
@@ -223,9 +225,10 @@ def updateItem(window):
             [pyGUI.Text('IP Address', size =(15, 1)), pyGUI.InputText(enable_events=True, key='-U_IP-', disabled=True)],
             [pyGUI.Text('Physical Location', size =(15, 1)), pyGUI.InputText(enable_events=True, key='-U_LOC-', disabled=True)],
             [pyGUI.Text('Purchase Date', size =(15, 1)), pyGUI.InputText(enable_events=True, key='-U_DATE-', disabled=True)],
-            [pyGUI.Text('Warranty Information', size =(15, 1)), pyGUI.InputText(enable_events=True, key='-U_WARRANTY-', disabled=True)],
-            [pyGUI.Text('Notes', size =(15, 1)), pyGUI.InputText(enable_events=True, key='-U_NOTES-', disabled=True)],
-            [pyGUI.Text('NIST Keywords (CSV)', font = 'ANY 8', size =(20, 1)), pyGUI.InputText(enable_events=True, key='-U_KEYWORDS-', disabled=True)],
+            [pyGUI.Text('Warranty Information', size = (15, 1)), pyGUI.Multiline(size=(43, 5), disabled=True, key='-U_WARRANTY-', enable_events=True)],
+            [pyGUI.Text('Notes', size = (15, 1)), pyGUI.Multiline(size=(43, 5), key='-U_NOTES-', disabled=True, enable_events=True)],
+            [pyGUI.Text('NIST Keywords (CSV)', font = 'ANY 8', size = (20, 1)), pyGUI.Multiline(size=(43, 5), disabled=True, key='-U_KEYWORDS-', enable_events=True)],
+            [pyGUI.Text('Invalid ID', key='-U_INVALID-', enable_events=True, visible=False)],
             [pyGUI.Button('Find Asset', key='-U_FIND-', visible = True)],
             [pyGUI.Button('Update Asset', key='-U_UPDATE-', visible = False)],
 
