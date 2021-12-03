@@ -156,11 +156,13 @@ def createItem(window):
             [pyGUI.Text('MAC Address', size =(15, 1)), pyGUI.InputText(enable_events=True, key='-C_MAC-')],
             [pyGUI.Text('IP Address', size =(15, 1)), pyGUI.InputText(enable_events=True, key='-C_IP-')],
             [pyGUI.Text('Physical Location', size =(15, 1)), pyGUI.InputText(enable_events=True, key='-C_LOC-')],
-            [pyGUI.Text('Buy Date (dd/mm/yyyy)',font='ANY 8', size =(20, 1)), pyGUI.InputText(enable_events=True, key='-C_DATE-')],
+            [pyGUI.Text('Buy Date', size =(15, 1)), pyGUI.InputText(enable_events=True, disabled=True, key='-C_DATE-')],
+            [pyGUI.CalendarButton('Calendar', target='-CAL-', pad=None, button_color=('black'), format=('%d-%m-%y'))],
             [pyGUI.Text('Warranty Information', size = (15, 1)), pyGUI.Multiline(size=(43, 5), key='-C_WARRANTY-', enable_events=True)],
             [pyGUI.Text('Notes', size = (15, 1)), pyGUI.Multiline(size=(43, 5), key='-C_NOTES-', enable_events=True)],
             [pyGUI.Text('NIST Keywords (CSV)', font = 'ANY 8', size = (20, 1)), pyGUI.Multiline(size=(43, 5), key='-C_KEYWORDS-', enable_events=True)],
             [pyGUI.Button('Create Asset', bind_return_key = True)],
+            [pyGUI.In(key='-CAL-', enable_events=True, visible=False)], 
         ]
     
     window = reloadFrame(window, layout)
@@ -194,13 +196,15 @@ def updateItem(window):
             [pyGUI.Text('MAC Address', size =(15, 1)), pyGUI.InputText(enable_events=True, key='-U_MAC-', disabled=True)],
             [pyGUI.Text('IP Address', size =(15, 1)), pyGUI.InputText(enable_events=True, key='-U_IP-', disabled=True)],
             [pyGUI.Text('Physical Location', size =(15, 1)), pyGUI.InputText(enable_events=True, key='-U_LOC-', disabled=True)],
-            [pyGUI.Text('Purchase Date', size =(15, 1)), pyGUI.InputText(enable_events=True, key='-U_DATE-', disabled=True)],
+            [pyGUI.Text('Buy Date', size =(15, 1)), pyGUI.InputText(enable_events=True, disabled=True, key='-U_DATE-')],
+            [pyGUI.CalendarButton('Calendar', target='-U_CAL-', pad=None, disabled=True, button_color=('black'), format=('%d-%m-%y'))],
             [pyGUI.Text('Warranty Information', size = (15, 1)), pyGUI.Multiline(size=(43, 5), disabled=True, key='-U_WARRANTY-', enable_events=True)],
             [pyGUI.Text('Notes', size = (15, 1)), pyGUI.Multiline(size=(43, 5), key='-U_NOTES-', disabled=True, enable_events=True)],
             [pyGUI.Text('NIST Keywords (CSV)', font = 'ANY 8', size = (20, 1)), pyGUI.Multiline(size=(43, 5), disabled=True, key='-U_KEYWORDS-', enable_events=True)],
             [pyGUI.Text('Invalid ID', key='-U_INVALID-', enable_events=True, visible=False)],
             [pyGUI.Button('Find Asset', key='-U_FIND-', visible = True)],
             [pyGUI.Button('Update Asset', key='-U_UPDATE-', visible = False)],
+            [pyGUI.In(key='-U_CAL-', enable_events=True, visible=False)], 
 
         ]
     window = reloadFrame(window, layout)

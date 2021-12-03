@@ -67,7 +67,7 @@ def main():
     
     window = init()
     #window = crudControls(window)
-    window = displayItems(window, getAsset(), getSoftware())
+    #window = displayItems(window, getAsset(), getSoftware())
     while True:
             
         event, values = window.read()
@@ -128,10 +128,8 @@ def main():
                     if len(values['-U_IP-']) > 0:
                         if len(values['-U_IP-']) > 12 or not regex.match('^[0-9.]+$', values['-U_IP-'][-1]):
                             window['-U_IP-'].update(values['-U_IP-'][:-1])
-                if event == '-U_DATE-':
-                    if len(values['-U_DATE-']) > 0:
-                        if len(values['-U_DATE-']) > 10 or not regex.match('^[0-9/-]+$', values['-U_DATE-'][-1]):
-                            window['-U_DATE-'].update(values['-U_DATE-'][:-1])
+                if event == '-U_CAL-':
+                    window['-U_DATE-'].update(values['-U_CAL-'])
                 if event == '-U_KEYWORDS-':
                     if len(values['-U_KEYWORDS-']) > 0:
                         if not regex.match('^[a-zA-Z0-9,]+$', values['-U_KEYWORDS-'][-1]):
@@ -146,8 +144,12 @@ def main():
                 if data:
                     i = 0
                     for keys in values:
-                        window[keys].update(data[0][i], disabled=False)
-                        i+=1
+                        if keys != 'Calendar' and keys !='-U_CAL-':
+                            window[keys].update(data[0][i], disabled=False)
+                            i+=1
+                        else:
+                            window[keys].update(disabled=False)
+                            
                     window['-U_INVALID-'].update(visible = False)
                     window['-U_ID-'].update(disabled=True)
                     window['-U_FIND-'].update(visible = False)
@@ -207,10 +209,9 @@ def main():
                     if len(values['-C_IP-']) > 0:
                         if len(values['-C_IP-']) > 12 or not regex.match('^[0-9.]+$', values['-C_IP-'][-1]):
                             window['-C_IP-'].update(values['-C_IP-'][:-1])
-                if event == '-C_DATE-':
-                    if len(values['-C_DATE-']) > 0:
-                        if len(values['-C_DATE-']) > 10 or not regex.match('^[0-9/-]+$', values['-C_DATE-'][-1]):
-                            window['-C_DATE-'].update(values['-C_DATE-'][:-1])
+                if event == '-CAL-':
+                    window['-C_DATE-'].update(values['-CAL-'])
+
                 if event == '-C_KEYWORDS-':
                     if len(values['-C_KEYWORDS-']) > 0:
                         if not regex.match('^[a-zA-Z0-9,]+$', values['-C_KEYWORDS-'][-1]):
