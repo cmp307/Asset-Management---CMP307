@@ -64,19 +64,43 @@ def main():
     global layout
     global loaded
     global toSearch
+
+    #keys for input length validation
+    
+    updateAssetCapHundred = ['-U_DESC-', '-U_WARRANTY-', '-U_NOTES-']
+    updateAssetCapThirty = ['-U_NAME-', '-U_MODEL-', '-U_MANU-', '-U_LOC-']
+    
+    createHardwareCapHundred = ['-C_DESCRIPTION-', '-C_WARRANTY-', '-C_NOTES-']
+    createHardwareCapThirty = ['-C_NAME-', '-C_MODEL-', '-C_MANU-', '-C_LOC-']
+    
+    createSoftwareCapHundred = ['-C_DESCRIPTION_SOFTWARE-', '-C_NOTES_SOFTWARE-']
+    createSoftwareCapThirty = ['-C_NAME-', '-C_VERSION-']
+        
+    createHardwareKeys = ['-C_NAME-', '-C_TYPE-', '-C_DESCRIPTION-', '-C_MODEL-', '-C_MANU-','-C_INTERNAL_ID-', '-C_MAC-','-C_IP-', '-C_LOC-', '-C_DATE-', '-C_WARRANTY-', '-C_NOTES-', '-C_KEYWORDS-', '-CAL-', '-CAL_BUTTON-', 'Create Hardware']
+    createSoftwareKeys = ['-C_NAME_SOFTWARE-','-C_TYPE_SOFTWARE-', '-C_DESCRIPTION_SOFTWARE-', '-C_VERSION-', '-C_DEVELOPER-', '-C_LICENSE-', '-C_LICENSE_KEY-', '-C_DATE_SOFTWARE-', '-C_NOTES_SOFTWARE-', '-C_KEYWORDS_SOFTWARE-', '-CAL_SOFTWARE-', '-CAL_BUTTON_SOFTWARE-', 'Create Software']
+
+    updateHardwareKeys = ['-U_ID-', '-U_NAME-', '-U_TYPE-', '-U_DESC-', '-U_MODEL-','-U_MANU-', '-U_INTERNAL_ID-','-U_MAC-', '-U_IP-', '-U_LOC-', '-U_DATE-', '-U_CAL-', '-U_WARRANTY-', '-U_NOTES-', '-U_KEYWORDS-', '-CAL_BUTTON-']
+    updateSoftwareKeys = ['-U_ID_SOFTWARE-', '-U_NAME_SOFTWARE-', '-U_TYPE_SOFTWARE-', '-U_DESCRIPTION_SOFTWARE-', '-U_VERSION-', '-U_DEVELOPER-', '-U_LICENSE-', '-U_LICENSE_KEY-', '-U_DATE_SOFTWARE-', '-U_NOTES_SOFTWARE-', '-U_KEYWORDS_SOFTWARE-', '-CAL_SOFTWARE-', '-CAL_BUTTON_SOFTWARE-']
     
     window = init()
-    #window = crudControls(window)
-    #window = displayItems(window, getAsset(), getSoftware())
     while True:
+
+        # read event and value data from current window
             
         event, values = window.read()
+
+        # close window, when exit pressed
         
         if event == pyGUI.WIN_CLOSED:
             window.close()
             break
-        if event == 'Return to Operations':
-            window = crudControls(window)
+
+        # operation button events: control panel, display, create, update, delete, vulnerability search , log out
+        #-----------------------------------------------------------------------------------------------------------------------------
+        if event == 'Return to Operations':     
+            window = controlPanel(window)
+        if event == 'Display':
+            window = displayItems(window, getAsset('hardware'), getAsset('software'))
         if event == 'Create':
             window = createItem(window)
         if event == 'Update':
@@ -84,26 +108,72 @@ def main():
         if event == 'Delete':
             window = deleteItem(window)
         if event == 'Vulnerability Search':
-            window = vulsearch(window, getAsset())
-            
+            window = vulnerabilitySearch(window, getAsset('hardware'), getAsset('software'))
+        if event == 'Log Out':
+            window.close
+            window = init()
+        #-----------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+        # delete frame: input validation and submit button handling
+        #----------------------------------------------------------------------------------------------------------------------------------
+        #if asset ID input box detects change: check if last character not an integer input, remove last character accordingly
+        
+        if event == '-D_CHOICE-':
+            if values['-D_CHOICE-'] == 'Hardware':
+                window['-D_ID-'].update(disabled=False)
+                window['Delete Hardware'].update(disabled=False)
+                window['-D_ID_SOFTWARE-'].update(disabled=True)
+                window['Delete Software'].update(disabled=True)
+            elif values['-D_CHOICE-'] == 'Software':
+                window['-D_ID-'].update(disabled=True)
+                window['Delete Hardware'].update(disabled=True)
+                window['-D_ID_SOFTWARE-'].update(disabled=False)
+                window['Delete Software'].update(disabled=False)
+    
         if event == '-D_ID-':
             if len(values['-D_ID-']) > 0 and not regex.match('^[0-9]+$', values['-D_ID-'][-1]):
                 window['-D_ID-'].update(values['-D_ID-'][:-1])
-                    
-        if event == 'Delete Asset':
-            result = deleteAsset(values)
-            if (result):
-                window = displayItems(window, getAsset(), getSoftware())
-            else:
+
+        if event == '-D_ID_SOFTWARE-':
+            if len(values['-D_ID_SOFTWARE-']) > 0 and not regex.match('^[0-9]+$', values['-D_ID_SOFTWARE-'][-1]):
+                window['-D_ID_SOFTWARE-'].update(values['-D_ID_SOFTWARE-'][:-1])
+
+                
+
+        #if delete button clicked            
+        if event == 'Delete Hardware':
+            result = deleteAsset('hardware', values)                                        #send SQL delete request with input ID
+            if (result):                                                                    #if successful: go to display
+                window = displayItems(window, getAsset('hardware'), getAsset('software'))
+            else:                                                                           #show invalid ID on screen
                 window['-D_INVALID-'].update(visible=True)
-                
+
+        if event == 'Delete Software':
+            result = deleteAsset('software', values)                                                  
+            if (result):                                                                    
+                window = displayItems(window, getAsset('hardware'), getAsset('software'))
+            else:                                                                         
+                window['-D_INVALID_SOFTWARE-'].update(visible=True)
+        #----------------------------------------------------------------------------------------------------------------------------------        
             
-        if event == 'Log Out':
-            window = init()
-                
-        updateAssetCapHundred = ['-U_DESC-', '-U_WARRANTY-', '-U_NOTES-']
-        updateAssetCapThirty = ['-U_NAME-', '-U_MODEL-', '-U_MANU-', '-U_LOC-']
+
+        # update frame      
+        #----------------------------------------------------------------------------------------------------------------------------------
+        if event == '-U_CHOICE-':
             
+            if values['-U_CHOICE-'] == 'Hardware':
+                    window['-U_ID-'].update(disabled=False)
+                    window['-U_ID_SOFTWARE-'].update(disabled=True)
+                    
+            elif values['-U_CHOICE-'] == 'Software':
+                    window['-U_ID_SOFTWARE-'].update(disabled=False)
+                    window['-U_ID-'].update(disabled=True)
+
+
+
         if '-U_UPDATE-' in window.AllKeysDict:
             try:
                 for keys in updateAssetCapHundred:
@@ -134,65 +204,133 @@ def main():
                     if len(values['-U_KEYWORDS-']) > 0:
                         if not regex.match('^[a-zA-Z0-9,]+$', values['-U_KEYWORDS-'][-1]):
                             window['-U_KEYWORDS-'].update(values['-U_KEYWORDS-'][:-1])
+            
             except:
                 pass
-     
-                
+
+        if '-U_UPDATE_SOFTWARE-' in window.AllKeysDict:
+            try:
+                for keys in updateAssetCapHundred:
+                    if event == keys:
+                        if len(values[keys]) > 0:
+                            if len(values[keys]) > 100 or not regex.match('^[a-zA-Z0-9_-]+$', values[keys][-1]):
+                                window[keys].update(values[keys][:-1])
+                for keys in updateAssetCapThirty:
+                    if event == keys:
+                        if len(values[keys]) > 0:
+                            if len(values[keys]) > 30 or not regex.match('^[a-zA-Z0-9_-]+$', values[keys][-1]):
+                                window[keys].update(values[keys][:-1])
+                if event == '-CAL_SOFTWARE-':
+                    window['-U_DATE_SOFTWARE-'].update(values['-CAL_SOFTWARE-'])
+                if event == '-U_KEYWORDS_SOFTWARE-':
+                    if len(values['-U_KEYWORDS_SOFTWARE-']) > 0:
+                        if not regex.match('^[a-zA-Z0-9,]+$', values['-U_KEYWORDS_SOFTWARE-'][-1]):
+                            window['-U_KEYWORDS_SOFTWARE-'].update(values['-U_KEYWORDS_SOFTWARE-'][:-1])
+            
+            except:
+                pass
+            
         if event == '-U_FIND-':
+            
             if len(values['-U_ID-']) > 0 or not regex.match('^[0-9]+$', values['-U_ID-'][-1]):
-                data = getAssetWhere(values['-U_ID-'])
+                data = getAssetWhere('hardware', values['-U_ID-'])
                 if data:
+                    window['-U_ID-'].update(disabled=False)
+                      
                     i = 0
-                    for keys in values:
-                        if keys != 'Calendar' and keys !='-U_CAL-':
-                            window[keys].update(data[0][i], disabled=False)
-                            i+=1
-                        else:
-                            window[keys].update(disabled=False)
-                            
-                    window['-U_INVALID-'].update(visible = False)
-                    window['-U_ID-'].update(disabled=True)
-                    window['-U_FIND-'].update(visible = False)
-                    window['-U_UPDATE-'].update(visible = True)
+                    
+                    for keys in updateHardwareKeys:
+                            if keys != '-CAL_BUTTON-' and keys !='-U_CAL-':
+                                window[keys].update(data[0][i], visible=True, disabled=False)
+                                i+=1
+                            else:
+                                window[keys].update(disabled=False)
+                    window['-U_FIND-'].update(visible=False)
+                    window['-U_UPDATE-'].update(visible=True)
+                                
+
                 else:
                    window['-U_INVALID-'].update(visible = True)
+                   
+        if event == '-U_FIND_SOFTWARE-':
+            
+            if len(values['-U_ID_SOFTWARE-']) > 0 or not regex.match('^[0-9]+$', values['-U_ID-'][-1]):
+                data = getAssetWhere('software', values['-U_ID_SOFTWARE-'])
+                if data:
+                    window['-U_ID_SOFTWARE-'].update(disabled=False)
+                      
+                    i = 0
+                    
+                    for keys in updateSoftwareKeys:
+                        try:
+                            if keys != '-CAL_BUTTON_SOFTWARE-' and keys !='-CAL_SOFTWARE-':
+                                window[keys].update(data[0][i], visible=True, disabled=False)
+                                i+=1
+                            else:
+                                window[keys].update(disabled=False)
+                        except:
+                            print(keys)
+                    window['-U_FIND_SOFTWARE-'].update(visible=False)
+                    window['-U_UPDATE_SOFTWARE-'].update(visible=True)
+                                
 
-        if event == '-U_UPDATE-':
-            updateAsset(values)
-            window = displayItems(window, getAsset(), getSoftware())
+                else:
+                   window['-U_INVALID_SOFTWARE-'].update(visible = True)
+
+        if event == '-U_UPDATE_SOFTWARE-':
+            updateAsset('software', values)
+            window = displayItems(window, getAsset('hardware'), getAsset('software'))
             
                     
-                
+        if event == '-U_UPDATE-':
+            updateAsset('hardware',values)
+            window = displayItems(window, getAsset('hardware'), getAsset('software')) 
 
 
         if event == '-U_ID-':
              if len(values['-U_ID-']) > 0:
                 if not regex.match('^[0-9]+$', values['-U_ID-'][-1]):
                     window['-U_ID-'].update(values['-U_ID-'][:-1])
-                    
-        if event == 'Display':
-            window = displayItems(window, getAsset(), getSoftware())
-            
-        if event == 'Create Asset':
-           MAC_Sanitisied = regex.sub('/[^\d|A-Z]/g', '', values['-C_MAC-'].upper())
-           MAC_Split = [MAC_Sanitisied[i:i+2] for i in range(0, len(MAC_Sanitisied), 2)]
-           window['-C_MAC-'].update(":".join(MAC_Split))
-           
-           createAsset(values)
-           window = displayItems(window, getAsset(),getSoftware())
-           
+        #------------------------------------------------------------------------------------------
 
-        createCapHundred = ['-C_DESCRIPTION-', '-C_WARRANTY-', '-C_NOTES-']
-        createCapThirty = ['-C_NAME-', '-C_MODEL-', '-C_MANU-', '-C_LOC-']
+
+                    
+        # create frame: asset type handling, asset input validation
+        #------------------------------------------------------------------------------------------
+
+        if event == '-C_CHOICE-':
+            if values['-C_CHOICE-'] == 'Hardware':
+                for keys in createHardwareKeys:
+                    window[keys].update(disabled=False)
+                for keys in createSoftwareKeys:
+                    window[keys].update(disabled=True)
+            elif values['-C_CHOICE-'] == 'Software':
+                for keys in createSoftwareKeys:
+                    window[keys].update(disabled=False)
+                for keys in createHardwareKeys:
+                    window[keys].update(disabled=True)
+
+  
+            window['-C_DATE-'].update(disabled=True)
+            window['-C_DATE_SOFTWARE-'].update(disabled=True)
+
+                
+        if event == 'Create Hardware':   
+           createAsset('hardware', values)
+           window = displayItems(window, getAsset('hardware'), getAsset('software'))
+
+        if event == 'Create Software':   
+           createAsset('software', values)
+           window = displayItems(window, getAsset('hardware'), getAsset('software'))
         
-        if '-CREATION-' in window.AllKeysDict:
+        if '-CREATE_HARDWARE-' in window.AllKeysDict:
             try:
-                for keys in createCapHundred:
+                for keys in createHardwareCapHundred:
                     if event == keys:
                         if len(values[keys]) > 0:
                             if len(values[keys]) > 100 or not regex.match('^[a-zA-Z0-9_-]+$', values[keys][-1]):
                                 window[keys].update(values[keys][:-1])
-                for keys in createCapThirty:
+                for keys in createHardwareCapThirty:
                     if event == keys:
                         if len(values[keys]) > 0:
                             if len(values[keys]) > 30 or not regex.match('^[a-zA-Z0-9_-]+$', values[keys][-1]):
@@ -211,7 +349,6 @@ def main():
                             window['-C_IP-'].update(values['-C_IP-'][:-1])
                 if event == '-CAL-':
                     window['-C_DATE-'].update(values['-CAL-'])
-
                 if event == '-C_KEYWORDS-':
                     if len(values['-C_KEYWORDS-']) > 0:
                         if not regex.match('^[a-zA-Z0-9,]+$', values['-C_KEYWORDS-'][-1]):
@@ -219,7 +356,29 @@ def main():
             except:
                 pass
 
-            
+        if '-CREATE_SOFTWARE-' in window.AllKeysDict:
+            try:
+                for keys in createSoftwareCapHundred:
+                    if event == keys:
+                        if len(values[keys]) > 0:
+                            if len(values[keys]) > 100 or not regex.match('^[a-zA-Z0-9_-]+$', values[keys][-1]):
+                                window[keys].update(values[keys][:-1])
+                for keys in createSoftwareCapThirty:
+                    if event == keys:
+                        if len(values[keys]) > 0:
+                            if len(values[keys]) > 30 or not regex.match('^[a-zA-Z0-9_-.]+$', values[keys][-1]):
+                                window[keys].update(values[keys][:-1])
+                if event == '-CAL_SOFTWARE-':
+                    window['-C_DATE_SOFTWARE-'].update(values['-CAL_SOFTWARE-'])
+                if event == '-C_KEYWORDS_SOFTWARE-':
+                    if len(values['-C_KEYWORDS_SOFTWARE-']) > 0:
+                        if not regex.match('^[a-zA-Z0-9,]+$', values['-C_KEYWORDS_SOFTWARE-'][-1]):
+                            window['-C_KEYWORDS_SOFTWARE-'].update(values['-C_KEYWORDS_SOFTWARE-'][:-1])
+            except:
+                pass
+
+
+    #------------------------------------------------------------------------------------------------            
                 
         if event == 'Search entire table for vunerabilities':
         
@@ -238,7 +397,7 @@ def main():
 
 
         if event == '-S_ASSET_ID_SUBMIT-':
-            keywords = getAssetWhere(values['-S_ASSET_ID_INPUT-'])
+            keywords = getAssetWhere('hardware', values['-S_ASSET_ID_INPUT-'])
             if keywords[0][13] != "":
                 setAPIVals(keywords[0][13])
                 layout = checkVun(window)
@@ -249,12 +408,12 @@ def main():
                 
         
         if event == 'Backup':
-            backup(getAsset())
+            backup(getAsset('hardware'), getAsset('software'))
                    
         if event == 'Return to display':
 
             loaded = False
-            window = displayItems(window, getAsset(), getSoftware())
+            window = displayItems(window, getAsset('hardware'), getAsset('software'))
 
         initCapTen = ['-USERNAME-', '-PASSWORD-']
 
