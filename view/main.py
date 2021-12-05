@@ -395,7 +395,7 @@ def main():
                             window['-C_INTERNAL_ID-'].update(values['-C_INTERNAL_ID-'][:-1])
                 if event == '-C_MAC-':
                     if len(values['-C_MAC-']) > 0:
-                        if len(values['-C_MAC-']) > 17 or not regex.match('^[a-zA-Z0-9]+$', values['-C_MAC-'][-1]):
+                        if len(values['-C_MAC-']) > 17 or not regex.match('^[a-zA-Z0-9:-]+$', values['-C_MAC-'][-1]):
                             window['-C_MAC-'].update(values['-C_MAC-'][:-1])
                 if event == '-C_IP-':
                     if len(values['-C_IP-']) > 0:

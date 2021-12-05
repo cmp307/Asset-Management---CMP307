@@ -1,17 +1,11 @@
-import pip
+packages = ['PySimpleGui', 'mysql-connector']
 
-def install(package):
-    if hasattr(pip, 'main'):
-        pip.main(['install', package])
-    else:
-        pip._internal.main(['install', package])
+# implement pip as a subprocess:
+import subprocess
+import sys
 
+def install(name):
+    subprocess.call(['pip', 'install', name])
 
-if __name__ == '__main__':
-    packages = ['PySimpleGui', 'mysql-connector']
-
-    for c in packages:
-        install(c)
-
-    
-
+for c in packages:
+    install(c)
