@@ -223,11 +223,14 @@ def createItem(window):
 
     x, y = getCenterScreen()
     
+    col1 = x/5
+    col2 = x/3 + 50
+    
     layout = [
         [
-            pyGUI.Column(assetType, scrollable=True,  size=(600,y-200), vertical_scroll_only=False),
-            pyGUI.Column(hardware, scrollable=True,  size=(600,y-200), vertical_scroll_only=False),
-            pyGUI.Column(software, scrollable=True,  size=(600,y-200), vertical_scroll_only=False),
+            pyGUI.Column(assetType, scrollable=True,  size=(col1,y-200), vertical_scroll_only=False),
+            pyGUI.Column(hardware, scrollable=True,  size=(col2,y-200), vertical_scroll_only=False),
+            pyGUI.Column(software, scrollable=True,  size=(col2,y-200), vertical_scroll_only=False),
         ]
     ]
         
@@ -259,13 +262,14 @@ def deleteItem(window):
     ]
 
     x, y = getCenterScreen()
-    x /= 4
+    col1 = x/5
+    col2 = x/3 + 50
     
     layout = [
         [
-            pyGUI.Column(assetType, scrollable=True, size=(x,y-200), vertical_scroll_only=False),
-            pyGUI.Column(hardware, scrollable=True,  size=(x,y-200), vertical_scroll_only=False),
-            pyGUI.Column(software, scrollable=True,  size=(x,y-200), vertical_scroll_only=False),
+            pyGUI.Column(assetType, scrollable=True,  size=(col1,y-200), vertical_scroll_only=False),
+            pyGUI.Column(hardware, scrollable=True,  size=(col2,y-200), vertical_scroll_only=False),
+            pyGUI.Column(software, scrollable=True,  size=(col2,y-200), vertical_scroll_only=False),
         ]
     ]
         
