@@ -144,11 +144,7 @@ def vulnerabilitySearch(window, hardware, software):
             [pyGUI.Image('scottishGlenLogo.png', background_color="grey80")],
             [pyGUI.Button('Return to Operations')],
             [pyGUI.Button('Search entire table for vunerabilities')],
-            [pyGUI.Button('Search for vunerabilities by Asset ID')],
-            [pyGUI.InputText(enable_events=True, key='-S_ASSET_ID_INPUT-', visible = False), pyGUI.Text('Enter Asset ID', size =(15, 1), enable_events=True, key='-S_ASSET_ID_TEXT-', visible = False)],
-            [pyGUI.Text('No keywords provided in this record', size =(27, 1), enable_events=True, key='-S_ASSET_ID_ERROR-', visible = False)],
             [pyGUI.Button('Submit', key='-S_ASSET_ID_SUBMIT-', visible=False)],
-            [pyGUI.Button('Search for vunerabilities by keyword')],
         ]
         
         window = reloadFrame(window, layout)
@@ -183,8 +179,8 @@ def createItem(window):
             [pyGUI.Text('Model', size =(15, 1)), pyGUI.InputText(enable_events=True, key='-C_MODEL-', disabled=True)],
             [pyGUI.Text('Manufacturer', size =(15, 1)), pyGUI.InputText(enable_events=True, key='-C_MANU-', disabled=True)],
             [pyGUI.Text('Internal ID', size =(15, 1)), pyGUI.InputText(enable_events=True, key='-C_INTERNAL_ID-', disabled=True)],
-            [pyGUI.Text('MAC Address', size =(15, 1)), pyGUI.InputText(enable_events=True, key='-C_MAC-', disabled=True)],
-            [pyGUI.Text('IP Address', size =(15, 1)), pyGUI.InputText(enable_events=True, key='-C_IP-', disabled=True)],
+            [pyGUI.Text('MAC Address', size =(15, 1)), pyGUI.InputText(enable_events=True, key='-C_MAC-', disabled=True), pyGUI.Text('Invalid MAC', key='-C_INVALID_MAC-', visible= False, enable_events=True)],
+            [pyGUI.Text('IP Address', size =(15, 1)), pyGUI.InputText(enable_events=True, key='-C_IP-', disabled=True), pyGUI.Text('Invalid IP', key='-C_INVALID_IP-', visible= False, enable_events=True)],
             [pyGUI.Text('Physical Location', size =(15, 1)), pyGUI.InputText(enable_events=True, key='-C_LOC-', disabled=True)],
             [pyGUI.Text('Buy Date', size =(15, 1)), pyGUI.InputText(enable_events=True, key='-C_DATE-', disabled=True)],
             [pyGUI.CalendarButton('Calendar', key='-CAL_BUTTON-', target='-CAL-', pad=None, button_color=('black'), format=('%d-%m-%y'), disabled=True)],
@@ -276,30 +272,30 @@ def updateItem(window):
     
     hardware = [
             [pyGUI.Text('Hardware Creation', font = 'ANY 14', key='-UPDATE_HARDWARE-')],
-            [pyGUI.Text('Asset ID', size =(15, 1)), pyGUI.InputText(enable_events=True, key='-U_ID-', disabled=True)],
+            [pyGUI.Text('Asset ID', size =(15, 1)), pyGUI.InputText(enable_events=True, key='-U_ID-', disabled=True), pyGUI.Button('Find Asset', key='-U_FIND-', disabled= True, visible = True)],
+            [pyGUI.Text('Invalid ID', font = 'ANY 14', key='-U_INVALID-', visible= False, enable_events=True, text_color = 'red')],
             [pyGUI.Text('Asset Name', size =(15, 1)), pyGUI.InputText(enable_events=True, key='-U_NAME-',disabled=True)],
             [pyGUI.Text('Device Type', size = (15, 1)), pyGUI.Combo(values=['Portable', 'Mobile', 'Network', 'Non-Computing', 'IOT', 'Other'], size=(43, 1), readonly=True, key='-U_TYPE-', enable_events=True, disabled=True)],
             [pyGUI.Text('Description', size = (15, 1)), pyGUI.Multiline(size=(43, 5), key='-U_DESC-', disabled=True, enable_events=True)],
             [pyGUI.Text('Model', size =(15, 1)), pyGUI.InputText(enable_events=True, key='-U_MODEL-', disabled=True)],
             [pyGUI.Text('Manufacturer', size =(15, 1)), pyGUI.InputText(enable_events=True, key='-U_MANU-', disabled=True)],
             [pyGUI.Text('Internal ID', size =(15, 1)), pyGUI.InputText(enable_events=True, key='-U_INTERNAL_ID-', disabled=True)],
-            [pyGUI.Text('MAC Address', size =(15, 1)), pyGUI.InputText(enable_events=True, key='-U_MAC-', disabled=True)],
-            [pyGUI.Text('IP Address', size =(15, 1)), pyGUI.InputText(enable_events=True, key='-U_IP-', disabled=True)],
+            [pyGUI.Text('MAC Address', size =(15, 1)), pyGUI.InputText(enable_events=True, key='-U_MAC-', disabled=True), pyGUI.Text('Invalid MAC', key='-U_INVALID_MAC-', visible= False, enable_events=True)],
+            [pyGUI.Text('IP Address', size =(15, 1)), pyGUI.InputText(enable_events=True, key='-U_IP-', disabled=True), pyGUI.Text('Invalid IP', key='-U_INVALID_IP-', visible= False, enable_events=True)],
             [pyGUI.Text('Physical Location', size =(15, 1)), pyGUI.InputText(enable_events=True, key='-U_LOC-', disabled=True)],
             [pyGUI.Text('Buy Date', size =(15, 1)), pyGUI.InputText(enable_events=True, disabled=True, key='-U_DATE-')],
             [pyGUI.CalendarButton('Calendar', target='-U_CAL-', key='-CAL_BUTTON-', pad=None, disabled=True, button_color=('black'), format=('%d-%m-%y'))],
             [pyGUI.Text('Warranty Information', size = (15, 1)), pyGUI.Multiline(size=(43, 5), disabled=True, key='-U_WARRANTY-', enable_events=True)],
             [pyGUI.Text('Notes', size = (15, 1)), pyGUI.Multiline(size=(43, 5), key='-U_NOTES-', disabled=True, enable_events=True)],
             [pyGUI.Text('NIST Keywords (CSV)', font = 'ANY 8', size = (20, 1)), pyGUI.Multiline(size=(43, 5), disabled=True,key='-U_KEYWORDS-', enable_events=True)],
-            [pyGUI.Text('Invalid ID', key='-U_INVALID-', visible= False, enable_events=True)],
-            [pyGUI.Button('Find Asset', key='-U_FIND-', visible = True)],
             [pyGUI.Button('Update Asset', key='-U_UPDATE-', visible = False)],
             [pyGUI.In(key='-U_CAL-', enable_events=True, visible=False)], 
     ]
 
     software = [
             [pyGUI.Text('Software Creation', font = 'ANY 14', key='-SOFTWARE_HARDWARE-')],
-            [pyGUI.Text('Asset ID', size =(15, 1)), pyGUI.InputText(enable_events=True, key='-U_ID_SOFTWARE-', disabled=True)],
+            [pyGUI.Text('Asset ID', size =(15, 1)), pyGUI.InputText(enable_events=True, key='-U_ID_SOFTWARE-', disabled=True), pyGUI.Button('Find Asset', key='-U_FIND_SOFTWARE-', disabled= True,visible = True)],
+            [pyGUI.Text('Invalid ID', text_color = 'red', font = 'ANY 14', key='-U_INVALID_SOFTWARE-', visible= False, enable_events=True)],
             [pyGUI.Text('Asset Name', size =(15, 1)), pyGUI.InputText(enable_events=True, key='-U_NAME_SOFTWARE-',disabled=True)],
             [pyGUI.Text('Type', size = (15, 1)), pyGUI.Combo(values=['Application', 'System', 'Firmware', 'Programming', 'Driver', 'Other'], size=(43, 1), readonly=True, key='-U_TYPE_SOFTWARE-', enable_events=True, disabled=True)],
             [pyGUI.Text('Description', size = (15, 1)), pyGUI.Multiline(size=(43, 5), key='-U_DESCRIPTION_SOFTWARE-', disabled=True, enable_events=True)],
@@ -312,8 +308,6 @@ def updateItem(window):
             [pyGUI.Text('Notes', size = (15, 1)), pyGUI.Multiline(size=(43, 5), key='-U_NOTES_SOFTWARE-', enable_events=True, disabled=True)],
             [pyGUI.Text('NIST Keywords (CSV)', font = 'ANY 8', size = (20, 1)), pyGUI.Multiline(size=(43, 5), key='-U_KEYWORDS_SOFTWARE-', enable_events=True, disabled=True)],
             [pyGUI.In(key='-CAL_SOFTWARE-', enable_events=True, visible=False, disabled=True)],
-            [pyGUI.Text('Invalid ID', key='-U_INVALID_SOFTWARE-', visible= False, enable_events=True)],
-            [pyGUI.Button('Find Asset', key='-U_FIND_SOFTWARE-', visible = True)],
             [pyGUI.Button('Update Asset', key='-U_UPDATE_SOFTWARE-', visible = False)],
             [pyGUI.In(key='-U_CAL_SOFTWARE-', enable_events=True, visible=False)], 
     ]
@@ -363,13 +357,37 @@ def displayItems(window, hardware, software):
             row.append(software[i][j])
         softwareAsset.append(row)
 
+    if not softwareAsset:
+        layout = [
+            [pyGUI.Button('Return to Operations')],
+            [pyGUI.Text('Hardware Assets', font = 'ANY 14')],
+            [pyGUI.Table(physicalAsset, vertical_scroll_only = False, headings=['Asset ID', 'Name', 'Device Type', 'Description', 'Model', 'Manufacturer', 'Internal ID', 'MAC Address', 'IP Address', 'Physical Location', 'Purchase Date', 'Warranty Info', 'Notes', 'NIST Keywords'])],
+            [pyGUI.Button('Search entire table for vunerabilities')],
+        ]
+        
+    if not physicalAsset:
+        layout = [
+            [pyGUI.Button('Return to Operations')],
+            [pyGUI.Text('Software Assets', font = 'ANY 14')],
+            [pyGUI.Table(softwareAsset, vertical_scroll_only = False, headings=['Software ID', 'Name', 'Type', 'Description', 'Version', 'Developer', 'License', 'Key', 'Date Purchased', 'Notes', 'NIST Keywords'])],
+            [pyGUI.Button('Search entire table for vunerabilities')],
+        ]
 
-    layout = [
-        [pyGUI.Button('Return to Operations')],
-        [pyGUI.Table(physicalAsset, vertical_scroll_only = False, headings=['Asset ID', 'Name', 'Device Type', 'Description', 'Model', 'Manufacturer', 'Internal ID', 'MAC Address', 'IP Address', 'Physical Location', 'Purchase Date', 'Warranty Info', 'Notes', 'NIST Keywords'])],
-        [pyGUI.Table(softwareAsset, vertical_scroll_only = False, headings=['Software ID', 'Name', 'Type', 'Description', 'Version', 'Developer', 'License', 'Key', 'Date Purchased', 'Notes', 'NIST Keywords'])],
-        [pyGUI.Button('Search entire table for vunerabilities')],
-    ]
+    if not physicalAsset and not softwareAsset:
+        layout = [
+            [pyGUI.Button('Return to Operations')],
+            [pyGUI.Text('No data', font = 'ANY 14')],
+        ]
+
+    if physicalAsset and softwareAsset:
+        layout = [
+            [pyGUI.Button('Return to Operations')],
+            [pyGUI.Text('Hardware Assets', font = 'ANY 14')],
+            [pyGUI.Table(physicalAsset, vertical_scroll_only = False, headings=['Asset ID', 'Name', 'Device Type', 'Description', 'Model', 'Manufacturer', 'Internal ID', 'MAC Address', 'IP Address', 'Physical Location', 'Purchase Date', 'Warranty Info', 'Notes', 'NIST Keywords'])],
+            [pyGUI.Text('Software Assets', font = 'ANY 14')],
+            [pyGUI.Table(softwareAsset, vertical_scroll_only = False, headings=['Software ID', 'Name', 'Type', 'Description', 'Version', 'Developer', 'License', 'Key', 'Date Purchased', 'Notes', 'NIST Keywords'])],
+            [pyGUI.Button('Search entire table for vunerabilities')],
+        ]
 
     window = reloadFrame(window, layout)
     return window
