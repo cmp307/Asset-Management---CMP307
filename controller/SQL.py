@@ -6,6 +6,24 @@ def userVerify(p1, p2):
     conn.execute(sqlString, (p1,p2))
     return conn.fetchall()
 
+def assetLink(formData):
+    conn, mydb = connectToDatabase()
+    sqlString = "INSERT INTO cmp307links (assetID, softwareID) VALUES (%s, %s)"
+    conn.execute(sqlString, (formData['-L_HARDWARE-'], formData['-L_SOFTWARE-']))
+    mydb.commit()
+
+def assetSelectWhere(formData):
+    conn, mydb = connectToDatabase()
+    sqlString = "SELECT * FROM cmp307links WHERE assetID = %s and softwareID = %s"
+    conn.execute(sqlString, (formData['-L_HARDWARE-'], formData['-L_SOFTWARE-']))
+    return conn.fetchall()
+
+def assetLinkRetrieve(id):
+    conn, mydb = connectToDatabase()
+    sqlString = "SELECT softwareID FROM cmp307links WHERE assetID = %s"
+    conn.execute(sqlString, (id, ))
+    return conn.fetchall()
+    
 
 def createAsset(request, formData):
     conn, mydb = connectToDatabase()

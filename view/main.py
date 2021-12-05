@@ -124,8 +124,8 @@ def main():
             window = updateItem(window)
         if event == 'Delete':
             window = deleteItem(window)
-        if event == 'Vulnerability Search':
-            window = vulnerabilitySearch(window, getAsset('hardware'), getAsset('software'))
+        if event == 'Create Asset Links':
+            window = createLinks(window)
         if event == 'Log Out':
             window.close
             window = init()
@@ -468,7 +468,46 @@ def main():
                 loginResult = verifyLogin(window, values['-USERNAME-'], values['-PASSWORD-'])   #validate login
                 if (loginResult != window):                                 #updateAsset window accordingly
                     window = loginResult
+                    
+    #asset linking: validation and button handling
+    #------------------------------------------------------------------------------------------------------------
 
+        if event == '-L_SUBMIT-':
+            window['-INVALID-'].update(visible=False)
+            
+            hardware_id = getAssetWhere('hardware', values['-L_HARDWARE-'])
+            software_id = getAssetWhere('software', values['-L_SOFTWARE-'])
+            
+            if hardware_id:
+                window['-INCORRECT_HARDWARE-'].update(visible=False)
+            elif not hardware_id:
+                window['-INCORRECT_HARDWARE-'].update(visible=True)
+
+            if software_id:
+                window['-INCORRECT_SOFTWARE-'].update(visible=False)
+            elif not software_id:
+                window['-INCORRECT_SOFTWARE-'].update(visible=True)
+                
+            if hardware_id and software_id:
+                if not assetSelectWhere(values):
+                    assetLink(values)
+                    window = displayItems(window, getAsset('hardware'), getAsset('software'))
+                else:
+                    window['-INVALID-'].update(visible=True)
+                    
+
+        if event == '-L_HARDWARE-':
+            if len(values['-L_HARDWARE-']) > 0:
+                if not regex.match('^[0-9]+$', values['-L_HARDWARE-'][-1]):
+                    window['-L_HARDWARE-'].update(values['-L_HARDWARE-'][:-1])
+                    
+        if event == '-L_SOFTWARE-':
+            if len(values['-L_SOFTWARE-']) > 0:
+                if not regex.match('^[0-9]+$', values['-L_SOFTWARE-'][-1]):
+                    window['-L_SOFTWARE-'].update(values['-L_SOFTWARE-'][:-1])
+
+            
+    #------------------------------------------------------------------------------------------------------------
 
 main()
 

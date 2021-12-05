@@ -2,7 +2,7 @@ import PySimpleGUI as pyGUI
 from ctypes import windll
 from math import floor
 from connection import connectToDatabase
-from SQL import userVerify
+from SQL import userVerify, assetLinkRetrieve
 from hashlib import md5
 from vunerability import *
 import re as regex
@@ -86,6 +86,19 @@ def reloadFrame(window, layout):
     window = createWindow(layout)
     return window
 
+
+def createLinks(window):
+    layout = [
+        [pyGUI.Button('Return to Operations')],
+        [pyGUI.Text('Please enter the asset IDs of the assets you would like to link', font = 'ANY 12')],
+        [pyGUI.Text('Hardware Asset ID', size =(15, 1)), pyGUI.InputText(enable_events=True, key='-L_HARDWARE-'), pyGUI.Text('Invalid Hardware ID', size =(15, 1), enable_events=True, key='-INCORRECT_HARDWARE-', visible = False)],
+        [pyGUI.Text('Software Asset ID', size =(15, 1)), pyGUI.InputText(enable_events=True, key='-L_SOFTWARE-'), pyGUI.Text('Invalid Software ID', size =(15, 1), enable_events=True, key='-INCORRECT_SOFTWARE-', visible = False)],
+        [pyGUI.Text('Link already exists', size =(15, 1), enable_events=True, key='-INVALID-', visible = False)],
+        [pyGUI.Button('Submit', key='-L_SUBMIT-', bind_return_key = True)]
+    ]
+        
+    window = reloadFrame(window, layout) 
+    return window
     
 def init():
     
@@ -109,7 +122,7 @@ def controlPanel(window):
             [pyGUI.Image('scottishGlenLogo.png', background_color="grey80")],
             [pyGUI.Button('Display', size=(10,1)), pyGUI.Button('Create', size=(10,1))],
             [pyGUI.Button('Update',size=(10,1)), pyGUI.Button('Delete', size=(10,1))],
-            [pyGUI.Button('Backup'), pyGUI.Button('Vulnerability Search')],
+            [pyGUI.Button('Backup'), pyGUI.Button('Create Asset Links')],
             [pyGUI.Button('Log Out', size=(10,1))],
 
         ]
@@ -347,6 +360,13 @@ def displayItems(window, hardware, software):
             row.append(hardware[i][j])
         physicalAsset.append(row)
 
+
+    if physicalAsset:
+        for i in range(0,len(hardware)):
+            physicalAsset[i].append(assetLinkRetrieve(physicalAsset[i][0]))
+
+    
+
     for i in range(0, len(software)):
         row = []
         for j in range(len(software[i])):
@@ -361,7 +381,7 @@ def displayItems(window, hardware, software):
         layout = [
             [pyGUI.Button('Return to Operations')],
             [pyGUI.Text('Hardware Assets', font = 'ANY 14')],
-            [pyGUI.Table(physicalAsset, vertical_scroll_only = False, headings=['Asset ID', 'Name', 'Device Type', 'Description', 'Model', 'Manufacturer', 'Internal ID', 'MAC Address', 'IP Address', 'Physical Location', 'Purchase Date', 'Warranty Info', 'Notes', 'NIST Keywords'])],
+            [pyGUI.Table(physicalAsset, vertical_scroll_only = False, headings=['Asset ID', 'Name', 'Device Type', 'Description', 'Model', 'Manufacturer', 'Internal ID', 'MAC Address', 'IP Address', 'Physical Location', 'Purchase Date', 'Warranty Info', 'Notes', 'NIST Keywords', 'Links (Software ID)'])],
             [pyGUI.Button('Search entire table for vunerabilities')],
         ]
         
@@ -383,7 +403,7 @@ def displayItems(window, hardware, software):
         layout = [
             [pyGUI.Button('Return to Operations')],
             [pyGUI.Text('Hardware Assets', font = 'ANY 14')],
-            [pyGUI.Table(physicalAsset, vertical_scroll_only = False, headings=['Asset ID', 'Name', 'Device Type', 'Description', 'Model', 'Manufacturer', 'Internal ID', 'MAC Address', 'IP Address', 'Physical Location', 'Purchase Date', 'Warranty Info', 'Notes', 'NIST Keywords'])],
+            [pyGUI.Table(physicalAsset, vertical_scroll_only = False, headings=['Asset ID', 'Name', 'Device Type', 'Description', 'Model', 'Manufacturer', 'Internal ID', 'MAC Address', 'IP Address', 'Physical Location', 'Purchase Date', 'Warranty Info', 'Notes', 'NIST Keywords', 'Links (Software ID)'])],
             [pyGUI.Text('Software Assets', font = 'ANY 14')],
             [pyGUI.Table(softwareAsset, vertical_scroll_only = False, headings=['Software ID', 'Name', 'Type', 'Description', 'Version', 'Developer', 'License', 'Key', 'Date Purchased', 'Notes', 'NIST Keywords'])],
             [pyGUI.Button('Search entire table for vunerabilities')],
