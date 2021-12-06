@@ -1,35 +1,39 @@
-import PySimpleGUI as pyGUI
-from ctypes import windll
-from math import floor
-from connection import connectToDatabase
-from SQL import userVerify, assetLinkRetrieve
-from hashlib import md5
-from vunerability import *
-import re as regex
-import csv
-import datetime
+#----------------------------------------------------------
+import PySimpleGUI as pyGUI  #GUI handling
+import re as regex           #Input Validation
+import csv                   #Backup to CSV file
+import datetime              #Get current date/time
 
+from ctypes import windll    #Screen size
+from SQL import userVerify, assetLinkRetrieve  #SQL queries
+from hashlib import md5      #User password encrypt
+from vunerability import *   #Vulnerability check
+#----------------------------------------------------------
 access = False
+#----------------------------------------------------------
 
-def getCenterScreen():
+def getCenterScreen():  #get screen size
     user32 = windll.user32
-    screensize = floor(user32.GetSystemMetrics(0) / 2) * 2, floor(user32.GetSystemMetrics(1) / 2) * 2
+    screensize = user32.GetSystemMetrics(0), user32.GetSystemMetrics(1)
     return screensize
 
-def backup(hardware, software):
+def backup(hardware, software): #take in hardware and software assets and store in CSV
     
     time = str(datetime.datetime.now())
-    head, sep, tail = time.partition('.')
-    head = head.replace(':', '-')
+    head, sep, tail = time.partition('.')   #discard seconds
+    head = head.replace(':', '-')           #replace colon with hyphen as filename doesn't permit
+
     
-    hardwarePath = '../backups/backup-hardware-'+head+'.csv'
+    #set file paths
+    hardwarePath = '../backups/backup-hardware-'+head+'.csv'    
     softwarePath = '../backups/backup-software-'+head+'.csv'
 
+    #set file headers
     headerHardware = ['assetID', 'assetName', 'deviceType', 'description', 'model', 'manufacturer', 'internalID', 'macAddress', 'ipAddress', 'physicalLocation', 'purchaseDate', 'warrantyInfo', 'notes', 'NISTKeywords']
     headerSoftware = ['assetID', 'assetName', 'type', 'description', 'version', 'developer', 'license', 'licenseKey', 'date', 'notes', 'NISTKeywords']
 
     try:
-        with open(hardwarePath, 'w', newline='') as f:
+        with open(hardwarePath, 'w', newline='') as f:  #create new file with hardware path
             writer = csv.writer(f)
             writer.writerow(headerHardware)
             
@@ -41,7 +45,7 @@ def backup(hardware, software):
 
             f.close()
             
-        with open(softwarePath, 'w', newline='') as f:
+        with open(softwarePath, 'w', newline='') as f:  #create new file with software path
             writer = csv.writer(f)
             writer.writerow(headerSoftware)
             
@@ -56,12 +60,12 @@ def backup(hardware, software):
         layout = [  [pyGUI.Text('Asset and Software placed in /backups', font='ANY 10')],
                     [pyGUI.Button('Close')],
         ]
-    except:
+    except:     #any exception show error layout
         layout = [  [pyGUI.Text('Error in creating backups', font='ANY 10')],
                     [pyGUI.Button('Close')],
         ]
         
-    window = pyGUI.Window("Backup", layout, size = (400,100), background_color="grey80", element_justification='c')
+    window = pyGUI.Window("Backup", layout, size = (400,100), background_color="grey80", element_justification='c') #display pop-up window
  
     while True:
         event, values = window.Read(timeout=25)
@@ -73,7 +77,7 @@ def backup(hardware, software):
 
 
 
-def createWindow(layout):
+def createWindow(layout):   #create window screen, used whenever a new frame is loaded
     global windowSize
 
     windowSize = getCenterScreen()
@@ -141,6 +145,8 @@ def vulnerabilitySearch(window, hardware, software):
         
         toSearch = []
 
+        #scan through data for vulnerability keywords
+        
         for i in range(0, len(hardware)):
             for j in range(len(hardware[i])):     
                 if (j==13):
@@ -167,11 +173,15 @@ def verifyLogin(window, username, password):
 
     global access
 
-    access = userVerify(username, md5(password.encode()).hexdigest())
-    if (access):
-        window = controlPanel(window)
+    access = userVerify(username, md5(password.encode()).hexdigest())   # retrieve access level using username and password provided
+    
+    if access !='firewall not connected':   #if firewall connected
+        if (access):                        #if access exists
+            window = controlPanel(window)   #show control panel
+        else:
+            window.Element('-INCORRECT_LOGIN-').Update(visible=True)
     else:
-        window.Element('-INCORRECT_LOGIN-').Update(visible=True)
+        print ('not connected to the firewall')
 
 
     return window
