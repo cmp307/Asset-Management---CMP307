@@ -494,8 +494,7 @@ def checkVun(window):
         a.append([pyGUI.Listbox(values=(data[c]), size=(100,10), horizontal_scroll=True)])
 
 
-    x = floor(windll.user32.GetSystemMetrics(0) / 2) * 2
-    y = floor(windll.user32.GetSystemMetrics(0) / 2) 
+    x,y = getCenterScreen()
     
     layout = [
         [

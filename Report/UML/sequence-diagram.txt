@@ -1,0 +1,36 @@
+actor User
+
+User->Login: Credentials
+Login->User: Account level
+alt Incorrect Login
+Login->User: Access denied
+end
+
+
+group report & all access users
+User->Display:
+Display->User: Asset data
+end
+
+
+group all access users
+User->Create: Create Asset Values
+
+
+User->Update: Asset ID to update
+Update->User: Requested ID values
+User->Update: Updated values
+
+
+User->Delete: Asset ID to update
+
+loop for each asset
+User->Vulnerability Search:
+User<-Vulnerability Search: Known vulnerabilities
+
+end
+
+User->Link Asset:	Asset IDs to link
+end
+
+
