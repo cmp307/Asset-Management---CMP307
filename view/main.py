@@ -127,7 +127,7 @@ def main():
         if event == 'Create Asset Links':
             window = createLinks(window)
         if event == 'Log Out':
-            window.close
+            window.close()
             window = init()
         #-----------------------------------------------------------------------------------------------------------------------------
 

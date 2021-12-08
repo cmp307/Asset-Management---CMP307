@@ -1,14 +1,15 @@
 import urllib.request, json, pprint
+import ssl
 
-
-def vunerabilitySearch(query):
+def vunerabilitySearch(query):  #call the api with passed in paramater
+    ssl._create_default_https_context = ssl._create_unverified_context
     with urllib.request.urlopen("https://services.nvd.nist.gov/rest/json/cves/1.0?namingFormat=2.3&keyword="+query) as url:
         data = json.loads(url.read().decode())
     return data
 
 
 
-def format (data):
+def format (data):  #fetch specific data from JSON string
     desc = []
     rating = []
     for c in range(data['resultsPerPage']):

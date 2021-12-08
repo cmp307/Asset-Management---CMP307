@@ -1,6 +1,6 @@
 from connection import connectToDatabase
 
-def userVerify(p1, p2):
+def userVerify(p1, p2): #verify user name and password
     try:
         conn, mydb = connectToDatabase()
         sqlString = "SELECT accessAll FROM cmp307logins WHERE username = %s AND password = %s"
@@ -21,7 +21,7 @@ def assetSelectWhere(formData):
     conn.execute(sqlString, (formData['-L_HARDWARE-'], formData['-L_SOFTWARE-']))
     return conn.fetchall()
 
-def assetLinkRetrieve(id):
+def assetLinkRetrieve(id):  
     conn, mydb = connectToDatabase()
     sqlString = "SELECT softwareID FROM cmp307links WHERE assetID = %s"
     conn.execute(sqlString, (id, ))
@@ -53,7 +53,7 @@ def getAsset(request):
     row = []
     data = []
 
-    try:
+    try:    #decode the data if needed
         for i in range(len(records)):
             row = []
             for j in range(len(records[i])):
@@ -77,7 +77,23 @@ def getAssetWhere(request, id):
         sqlString = "SELECT * FROM cmp307software WHERE assetID = %s"
         
     conn.execute(sqlString, (id,))
-    return conn.fetchall()
+    records = conn.fetchall()
+    
+    row = []
+    data = []
+
+    try:    #decode the data if needed 
+        for i in range(len(records)):
+            row = []
+            for j in range(len(records[i])):
+                if not (type(records[i][j]) == int):
+                    row.append(records[i][j].decode())
+                else:
+                    row.append(records[i][j])
+            data.append(row)
+        return data
+    except:
+        return records
 
 def updateAsset(request,formData):
     conn, mydb = connectToDatabase()

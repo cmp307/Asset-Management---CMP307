@@ -1,0 +1,2 @@
+assetID,assetName,deviceType,description,model,manufacturer,internalID,macAddress,ipAddress,physicalLocation,purchaseDate,warrantyInfo,notes,NISTKeywords
+67,laptop-1,Network,a,a,a,a,00:00:5e:00:53:af,127.0.0.1,a,15-12-21,a,a,Bluetooth
