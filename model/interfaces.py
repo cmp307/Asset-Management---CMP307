@@ -1,81 +1,21 @@
 #----------------------------------------------------------
 import PySimpleGUI as pyGUI  #GUI handling
 import re as regex           #Input Validation
-import csv                   #Backup to CSV file
-import datetime              #Get current date/time
 
 from ctypes import windll    #Screen size
-from SQL import userVerify, assetLinkRetrieve  #SQL queries
-from hashlib import md5      #User password encrypt
+from SQL import assetLinkRetrieve  #SQL queries
 from vunerability import *   #Vulnerability check
+
+from user import *
 #----------------------------------------------------------
 access = False
+account = User()
 #----------------------------------------------------------
 
 def getCenterScreen():  #get screen size
     user32 = windll.user32
     screensize = user32.GetSystemMetrics(0), user32.GetSystemMetrics(1)
     return screensize
-
-def backup(hardware, software): #take in hardware and software assets and store in CSV
-    
-    time = str(datetime.datetime.now())
-    head, sep, tail = time.partition('.')   #discard seconds
-    head = head.replace(':', '-')           #replace colon with hyphen as filename doesn't permit
-
-    
-    #set file paths
-    hardwarePath = '../backups/backup-hardware-'+head+'.csv'    
-    softwarePath = '../backups/backup-software-'+head+'.csv'
-
-    #set file headers
-    headerHardware = ['assetID', 'assetName', 'deviceType', 'description', 'model', 'manufacturer', 'internalID', 'macAddress', 'ipAddress', 'physicalLocation', 'purchaseDate', 'warrantyInfo', 'notes', 'NISTKeywords']
-    headerSoftware = ['assetID', 'assetName', 'type', 'description', 'version', 'developer', 'license', 'licenseKey', 'date', 'notes', 'NISTKeywords']
-
-    try:
-        with open(hardwarePath, 'w', newline='') as f:  #create new file with hardware path
-            writer = csv.writer(f)
-            writer.writerow(headerHardware)
-            
-            for i in range(0, len(hardware)):
-                row = []
-                for j in range(len(hardware[i])):            
-                    row.append(hardware[i][j])
-                writer.writerow(row)
-
-            f.close()
-            
-        with open(softwarePath, 'w', newline='') as f:  #create new file with software path
-            writer = csv.writer(f)
-            writer.writerow(headerSoftware)
-            
-            for i in range(0, len(software)):
-                row = []
-                for j in range(len(software[i])):            
-                    row.append(software[i][j])
-                writer.writerow(row)
-
-            f.close()
-
-        layout = [  [pyGUI.Text('Asset and Software placed in /backups', font='ANY 10')],
-                    [pyGUI.Button('Close')],
-        ]
-    except:     #any exception show error layout
-        layout = [  [pyGUI.Text('Error in creating backups', font='ANY 10')],
-                    [pyGUI.Button('Close')],
-        ]
-        
-    window = pyGUI.Window("Backup", layout, size = (400,100), background_color="grey80", element_justification='c') #display pop-up window
- 
-    while True:
-        event, values = window.Read(timeout=25)
-        if event in (None, 'Exit', 'Cancel'):
-            break
-        if event == 'Close':
-            window.close()
-            break
-
-
 
 def createWindow(layout):   #create window screen, used whenever a new frame is loaded
     global windowSize
@@ -120,8 +60,9 @@ def init():
     return window
 
 def controlPanel(window):
-    global access
-    if access[0][0]:
+    global account
+    
+    if account.accessLevel:
         layout = [
             [pyGUI.Image('scottishGlenLogo.png', background_color="grey80")],
             [pyGUI.Button('Display', size=(10,1)), pyGUI.Button('Create', size=(10,1))],
@@ -171,20 +112,19 @@ def vulnerabilitySearch(window, hardware, software):
     
 def verifyLogin(window, username, password):
 
-    global access
+    global account
 
-    access = userVerify(username, md5(password.encode()).hexdigest())   # retrieve access level using username and password provided
+    account.verify(username, password)
     
-    if access !='firewall not connected':   #if firewall connected
-        if (access):                        #if access exists
-            window = controlPanel(window)   #show control panel
-        else:
-            window.Element('-INCORRECT_LOGIN-').Update(visible=True)
+
+    if (account.accessLevel !=""):           #if access exists
+        window = controlPanel(window)   #show control panel
     else:
-        print ('not connected to the firewall')
+        window.Element('-INCORRECT_LOGIN-').Update(visible=True)
+
+    return account, window
 
 
-    return window
     
 def createItem(window):
 

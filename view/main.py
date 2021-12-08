@@ -18,8 +18,8 @@ sys.path.insert(1, '../backups')
 #--------------------------------------
 from SQL import *
 from interfaces import *
+from user import *
 #---------------------------------------
-
 #global variables
 #---------------------------------------
 loaded = False          #handles if vulnerability check finished
@@ -72,7 +72,8 @@ def main():
     global window
     global layout
     global loaded
-
+    global account
+    
     #keys for input handling
     #---------------------------------------------------------------------------
     updateAssetCapHundred = ['-U_DESC-', '-U_WARRANTY-', '-U_NOTES-']
@@ -127,6 +128,7 @@ def main():
         if event == 'Create Asset Links':
             window = createLinks(window)
         if event == 'Log Out':
+            account.logout()
             window.close()
             window = init()
         #-----------------------------------------------------------------------------------------------------------------------------
@@ -446,7 +448,16 @@ def main():
             
         
         if event == 'Backup':
-            backup(getAsset('hardware'), getAsset('software'))
+            backup = Backup(getAsset('hardware'), getAsset('software'))
+            popUp = backup.writeToCSV()
+            while True:
+                event, values = popUp.Read(timeout=25)
+                if event in (None, 'Exit', 'Cancel'):
+                    break
+                if event == 'Close':
+                    popUp.close()
+                    break
+            
                    
         if event == 'Return to display':
 
@@ -465,7 +476,7 @@ def main():
         
         if event == '-LOGIN-':                                              #if login button is pressed
             if len(values['-USERNAME-']) and len(values['-PASSWORD-']) > 0:                     #check not empty
-                loginResult = verifyLogin(window, values['-USERNAME-'], values['-PASSWORD-'])   #validate login
+                account, loginResult = verifyLogin(window, values['-USERNAME-'], values['-PASSWORD-'])   #validate login
                 if (loginResult != window):                                 #updateAsset window accordingly
                     window = loginResult
                     

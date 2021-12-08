@@ -1,14 +1,5 @@
 from connection import connectToDatabase
 
-def userVerify(p1, p2):
-    try:
-        conn, mydb = connectToDatabase()
-        sqlString = "SELECT accessAll FROM cmp307logins WHERE username = %s AND password = %s"
-        conn.execute(sqlString, (p1,p2))
-        return conn.fetchall()
-    except:
-        return 'firewall not connected'
-
 def assetLink(formData):
     conn, mydb = connectToDatabase()
     sqlString = "INSERT INTO cmp307links (assetID, softwareID) VALUES (%s, %s)"
