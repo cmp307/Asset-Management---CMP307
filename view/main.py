@@ -19,6 +19,7 @@ sys.path.insert(1, '../backups')
 from SQL import *
 from interfaces import *
 from user import *
+from asset import *
 #---------------------------------------
 #global variables
 #---------------------------------------
@@ -67,12 +68,34 @@ def vunerabilityAPICall():
         
     loaded = True                                               #end the loading screen
 
+
+def reloadAssets():
+    h = getAsset('hardware')
+    s = getAsset('software')
+
+    assets = []
+    
+    for array in h:
+        a = Asset()
+        a.setData('hardware', array)
+        assets.append(a)
+
+    for array in s:
+        a = Asset()
+        a.setData('software', array)
+        assets.append(a)
+        
+    return assets
+
         
 def main():
     global window
     global layout
     global loaded
     global account
+
+    assets = reloadAssets()
+        
     
     #keys for input handling
     #---------------------------------------------------------------------------
@@ -118,7 +141,8 @@ def main():
         if event == 'Return to Operations':     
             window = controlPanel(window)
         if event == 'Display':
-            window = displayItems(window, getAsset('hardware'), getAsset('software'))
+            assets = reloadAssets()
+            window = displayItems(window, assets)
         if event == 'Create':
             window = createItem(window)
         if event == 'Update':
@@ -168,17 +192,31 @@ def main():
         #if hardware /software delete button clicked
                 
         if event == 'Delete Hardware':
-            result = deleteAsset('hardware', values)                                        #send delete request with input ID
-            if (result):                                                                    #if successful: go to display
-                window = displayItems(window, getAsset('hardware'), getAsset('software'))
-            else:                                                                           #show invalid ID on screen
+            found = False
+            
+            for i in range (len(assets)):
+                if (values['-D_ID-'] == assets[i].getID()):
+                    assets[i].deleteAsset()
+                    found = True
+                    assets = reloadAssets()
+                    window = displayItems(window, assets)
+                    break
+
+            if not found:    
                 window['-D_INVALID-'].update(visible=True)
 
         if event == 'Delete Software':
-            result = deleteAsset('software', values)                                                  
-            if (result):                                                                    
-                window = displayItems(window, getAsset('hardware'), getAsset('software'))
-            else:                                                                         
+            found = False
+            
+            for i in range (len(assets)):
+                if (values['-D_ID_SOFTWARE-'] == assets[i].getID()):
+                    assets[i].deleteAsset()
+                    found = True
+                    assets = reloadAssets()
+                    window = displayItems(window, assets)
+                    break
+
+            if not found:    
                 window['-D_INVALID_SOFTWARE-'].update(visible=True)
         #----------------------------------------------------------------------------------------------------------------------------------        
             
@@ -246,10 +284,10 @@ def main():
                 for keys in updateSoftwareCapThirty:
                     if event == keys:
                         if len(values[keys]) > 0:
-                            if len(values[keys]) > 30 or not regex.match('^[a-zA-Z0-9_-]+$', values[keys][-1]):
+                            if len(values[keys]) > 30 or not regex.match('^[a-zA-Z0-9_\.]+$', values[keys][-1]):
                                 window[keys].update(values[keys][:-1])
-                if event == '-CAL_BUTTON_SOFTWARE-':
-                    window['-U_DATE_SOFTWARE-'].update(values['-CAL_BUTTON_SOFTWARE-'])
+                if event == '-U_CAL_SOFTWARE-':                                                                                  #update date input box with calendar input
+                    window['-U_DATE_SOFTWARE-'].update(values['-U_CAL_SOFTWARE-'])
                 if event == '-U_KEYWORDS_SOFTWARE-':
                     if len(values['-U_KEYWORDS_SOFTWARE-']) > 0:
                         if not regex.match('^[a-zA-Z0-9]+$', values['-U_KEYWORDS_SOFTWARE-'][-1]):
@@ -302,7 +340,8 @@ def main():
                                 else:
                                     window[keys].update(disabled=False)
                             except:
-                                print(keys)
+                                pass
+                                #print(keys)
                         window['-U_FIND_SOFTWARE-'].update(visible=False)
                         window['-U_UPDATE_SOFTWARE-'].update(visible=True)
                                     
@@ -311,16 +350,36 @@ def main():
                        window['-U_INVALID_SOFTWARE-'].update(visible = True)
 
         if event == '-U_UPDATE_SOFTWARE-':          #if software update pressed: update the applicable record with new data
-            updateAsset('software', values)
-            window = displayItems(window, getAsset('hardware'), getAsset('software'))   #return to display
+            d = []
+            
+            for a in updateSoftwareKeys:
+                d.append(values[a])
+
+            id = int(values['-U_ID_SOFTWARE-'])
+            for a in range(len(assets)):
+                if int(assets[a].getID()) == int(id):
+                    assets[a].setData('software', d)
+                    assets[a].updateAsset()
+                    assets = reloadAssets()
+                    window = displayItems(window, assets)   #return to display
             
                     
         if event == '-U_UPDATE-':                   #if hardware update pressed: update the applicable record with new data
+            d = []
+            
+            for a in updateHardwareKeys:
+                d.append(values[a])
+
             if regex.match(r'^((\d{1,2}|1\d{2}|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d{2}|2[0-4]\d|25[0-5])$', values['-U_IP-']):   #check valid IP
                 window['-U_INVALID_IP-'].update(visible=False)
                 if regex.match('^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$', values['-U_MAC-']):   #check valid IP
-                    updateAsset('hardware',values)
-                    window = displayItems(window, getAsset('hardware'), getAsset('software'))
+                    id = int(values['-U_ID-'])
+                    for a in range(len(assets)):
+                            if int(assets[a].getID()) == int(id):
+                                assets[a].setData('hardware', d)
+                                assets[a].updateAsset()
+                                assets = reloadAssets()
+                                window = displayItems(window, assets)   #return to display
                 else:
                     window['-U_INVALID_MAC-'].update(visible=True)
             else:
@@ -367,7 +426,8 @@ def main():
                     window['-C_INVALID_IP-'].update(visible=False)
                     if regex.match('^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$', values['-C_MAC-']):   #check valid IP
                        createAsset('hardware', values)
-                       window = displayItems(window, getAsset('hardware'), getAsset('software'))
+                       assets = reloadAssets()
+                       window = displayItems(window, assets)
                     else:
                        window['-C_INVALID_MAC-'].update(visible=True)
                 else:
@@ -377,7 +437,8 @@ def main():
         if event == 'Create Software':
             if values['-C_NAME_SOFTWARE-'] !="":
                createAsset('software', values)
-               window = displayItems(window, getAsset('hardware'), getAsset('software'))
+               assets = reloadAssets()
+               window = displayItems(window, assets)
             
         if '-CREATE_HARDWARE-' in window.AllKeysDict:
             try:
@@ -417,12 +478,12 @@ def main():
                 for keys in createSoftwareCapHundred:
                     if event == keys:
                         if len(values[keys]) > 0:
-                            if len(values[keys]) > 100 or not regex.match('^[a-zA-Z0-9_-]+$', values[keys][-1]):  
+                            if len(values[keys]) > 100 or not regex.match('^[a-zA-Z0-9_\.]+$', values[keys][-1]):  
                                 window[keys].update(values[keys][:-1])
                 for keys in createSoftwareCapThirty:
                     if event == keys:
                         if len(values[keys]) > 0:
-                            if len(values[keys]) > 30 or not regex.match('^[a-zA-Z0-9_-]+$', values[keys][-1]):
+                            if len(values[keys]) > 30 or not regex.match('^[a-zA-Z0-9.-]+$', values[keys][-1]):
                                 window[keys].update(values[keys][:-1])
                 if event == '-CAL_SOFTWARE-':
                     window['-C_DATE_SOFTWARE-'].update(values['-CAL_SOFTWARE-'])
@@ -462,7 +523,8 @@ def main():
         if event == 'Return to display':
 
             loaded = False
-            window = displayItems(window, getAsset('hardware'), getAsset('software'))
+            assets = reloadAssets()
+            window = displayItems(window, assets)
 
         initCapTen = ['-USERNAME-', '-PASSWORD-']
 
@@ -485,26 +547,37 @@ def main():
 
         if event == '-L_SUBMIT-':
             window['-INVALID-'].update(visible=False)
+
+            hFound = -1
+            sFound = -1
             
-            hardware_id = getAssetWhere('hardware', values['-L_HARDWARE-'])
-            software_id = getAssetWhere('software', values['-L_SOFTWARE-'])
+            for i in range(len(assets)):
+                print(values['-L_HARDWARE-'])
+                print(assets[i].getID())
+                if int(assets[i].getID()) == int(values['-L_HARDWARE-']) and assets[i].assetType == 'hardware':
+                    hFound = i                    
+                if int(assets[i].getID()) == int(values['-L_SOFTWARE-']) and assets[i].assetType == 'software':
+                    sFound = i
+
+            print(hFound)
             
-            if hardware_id:
+            if hFound >= 0:
                 window['-INCORRECT_HARDWARE-'].update(visible=False)
-            elif not hardware_id:
+            else:
                 window['-INCORRECT_HARDWARE-'].update(visible=True)
 
-            if software_id:
+            if sFound >= 0:
                 window['-INCORRECT_SOFTWARE-'].update(visible=False)
-            elif not software_id:
+            else:
                 window['-INCORRECT_SOFTWARE-'].update(visible=True)
                 
-            if hardware_id and software_id:
-                if not assetSelectWhere(values):
-                    assetLink(values)
-                    window = displayItems(window, getAsset('hardware'), getAsset('software'))
-                else:
-                    window['-INVALID-'].update(visible=True)
+            if hFound >= 0 and sFound >= 0:
+                    if not (assetSelectWhere(values)):
+                        assets[hFound].linkAsset(assets[sFound].getID(), assets[hFound].getID())
+                        assets = reloadAssets()
+                        window = displayItems(window, assets)
+                    else:
+                        window['-INVALID-'].update(visible=True)
                     
 
         if event == '-L_HARDWARE-':

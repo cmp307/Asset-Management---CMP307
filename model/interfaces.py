@@ -272,7 +272,7 @@ def updateItem(window):
             [pyGUI.Text('License', size = (15, 1)), pyGUI.Combo(values=['Public domain', 'Permissive', 'Copyleft', 'Non-commercial', 'Proprietary', 'Other'], size=(43, 1), readonly=True, key='-U_LICENSE-', enable_events=True, disabled=True)],
             [pyGUI.Text('License Key ', size =(15, 1)), pyGUI.InputText(enable_events=True, key='-U_LICENSE_KEY-', disabled=True)],
             [pyGUI.Text('Buy Date', size =(15, 1)), pyGUI.InputText(enable_events=True, key='-U_DATE_SOFTWARE-', disabled=True)],
-            [pyGUI.CalendarButton('Calendar', key='-CAL_BUTTON_SOFTWARE-', target='-CAL_SOFTWARE-', pad=None, button_color=('black'), format=('%d-%m-%y'), disabled=True)],
+            [pyGUI.CalendarButton('Calendar', key='-CAL_BUTTON_SOFTWARE-', target='-U_CAL_SOFTWARE-', pad=None, button_color=('black'), format=('%d-%m-%y'), disabled=True)],
             [pyGUI.Text('Notes', size = (15, 1)), pyGUI.Multiline(size=(43, 5), key='-U_NOTES_SOFTWARE-', enable_events=True, disabled=True)],
             [pyGUI.Text('NIST Keywords (CSV)', font = 'ANY 8', size = (20, 1)), pyGUI.Multiline(size=(43, 5), key='-U_KEYWORDS_SOFTWARE-', enable_events=True, disabled=True)],
             [pyGUI.In(key='-CAL_SOFTWARE-', enable_events=True, visible=False, disabled=True)],
@@ -299,51 +299,43 @@ def updateItem(window):
     return window
     
 
-def displayItems(window, hardware, software):
+def displayItems(window, assets):
 
     global toSearch
     
-    physicalAsset = []
-    softwareAsset = []
-    
     toSearch = []
 
-    for i in range(0, len(hardware)):
-        row = []
-        for j in range(len(hardware[i])):
-            if (j==13):
-                if (hardware[i][j] != ""):
-                   toSearch.append(hardware[i][j])
-               
-            row.append(hardware[i][j])
-        physicalAsset.append(row)
-
-
-    if physicalAsset:
-        for i in range(0,len(hardware)):
-            physicalAsset[i].append(assetLinkRetrieve(physicalAsset[i][0]))
-
+    hardwareAsset = []
+    softwareAsset = []
+    row = []
     
+    for i in range(0, len(assets)):
+        assets[i].getLinks()
+        if assets[i].keyword != "":
+            toSearch.append(assets[i].keyword)
+        
+        if assets[i].assetType == 'hardware':
+            row = []
+            for j in range(len(assets[i].assetData)):
+                row.append(assets[i].assetData[j])
+            hardwareAsset.append(row)
+            
+        if assets[i].assetType == 'software':
+            row = []
+            for j in range(len(assets[i].assetData)):
+                row.append(assets[i].assetData[j])
+            softwareAsset.append(row)            
 
-    for i in range(0, len(software)):
-        row = []
-        for j in range(len(software[i])):
-            if (j==10):
-                if (software[i][j] != ""):
-                   toSearch.append(software[i][j])
-               
-            row.append(software[i][j])
-        softwareAsset.append(row)
-
+            
     if not softwareAsset:
         layout = [
             [pyGUI.Button('Return to Operations')],
             [pyGUI.Text('Hardware Assets', font = 'ANY 14')],
-            [pyGUI.Table(physicalAsset, vertical_scroll_only = False, headings=['Asset ID', 'Name', 'Device Type', 'Description', 'Model', 'Manufacturer', 'Internal ID', 'MAC Address', 'IP Address', 'Physical Location', 'Purchase Date', 'Warranty Info', 'Notes', 'NIST Keywords', 'Links (Software ID)'])],
+            [pyGUI.Table(hardwareAsset, vertical_scroll_only = False, headings=['Asset ID', 'Name', 'Device Type', 'Description', 'Model', 'Manufacturer', 'Internal ID', 'MAC Address', 'IP Address', 'Physical Location', 'Purchase Date', 'Warranty Info', 'Notes', 'NIST Keywords', 'Links (Software ID)'])],
             [pyGUI.Button('Search entire table for vunerabilities')],
         ]
         
-    if not physicalAsset:
+    if not hardwareAsset:
         layout = [
             [pyGUI.Button('Return to Operations')],
             [pyGUI.Text('Software Assets', font = 'ANY 14')],
@@ -351,17 +343,17 @@ def displayItems(window, hardware, software):
             [pyGUI.Button('Search entire table for vunerabilities')],
         ]
 
-    if not physicalAsset and not softwareAsset:
+    if not hardwareAsset and not softwareAsset:
         layout = [
             [pyGUI.Button('Return to Operations')],
             [pyGUI.Text('No data', font = 'ANY 14')],
         ]
 
-    if physicalAsset and softwareAsset:
+    if hardwareAsset and softwareAsset:
         layout = [
             [pyGUI.Button('Return to Operations')],
             [pyGUI.Text('Hardware Assets', font = 'ANY 14')],
-            [pyGUI.Table(physicalAsset, vertical_scroll_only = False, headings=['Asset ID', 'Name', 'Device Type', 'Description', 'Model', 'Manufacturer', 'Internal ID', 'MAC Address', 'IP Address', 'Physical Location', 'Purchase Date', 'Warranty Info', 'Notes', 'NIST Keywords', 'Links (Software ID)'])],
+            [pyGUI.Table(hardwareAsset, vertical_scroll_only = False, headings=['Asset ID', 'Name', 'Device Type', 'Description', 'Model', 'Manufacturer', 'Internal ID', 'MAC Address', 'IP Address', 'Physical Location', 'Purchase Date', 'Warranty Info', 'Notes', 'NIST Keywords', 'Links (Software ID)'])],
             [pyGUI.Text('Software Assets', font = 'ANY 14')],
             [pyGUI.Table(softwareAsset, vertical_scroll_only = False, headings=['Software ID', 'Name', 'Type', 'Description', 'Version', 'Developer', 'License', 'Key', 'Date Purchased', 'Notes', 'NIST Keywords'])],
             [pyGUI.Button('Search entire table for vunerabilities')],

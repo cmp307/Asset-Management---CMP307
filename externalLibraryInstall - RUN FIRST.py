@@ -1,7 +1,7 @@
 import subprocess
 import sys
 
-packages = ['PySimpleGui', 'mysql-connector'] #libraries to install
+packages = ['PySimpleGui', 'mysql-connector', 'numpy'] #libraries to install
 
 def install(name):
     subprocess.call(['pip', 'install', name])   #install library using pip install
