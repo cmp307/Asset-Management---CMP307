@@ -1,6 +1,8 @@
 #----------------------------------------------------------
 import PySimpleGUI as pyGUI  #GUI handling
 import re as regex           #Input Validation
+import subprocess
+import os
 
 from ctypes import windll    #Screen size
 from SQL import assetLinkRetrieve  #SQL queries
@@ -11,6 +13,14 @@ from user import *
 access = False
 account = User()
 #----------------------------------------------------------
+
+def dump(txt):
+    if type(txt) == list:
+        with open("../nist/NIST dump.txt", 'a', newline="") as text_file:
+            for a in txt:
+                text_file.write(a)
+            text_file.write("\n\n")
+
 
 def getCenterScreen():  #get screen size
     user32 = windll.user32
@@ -142,8 +152,8 @@ def createItem(window):
             [pyGUI.Text('Model', size =(15, 1)), pyGUI.InputText(enable_events=True, key='-C_MODEL-', disabled=True)],
             [pyGUI.Text('Manufacturer', size =(15, 1)), pyGUI.InputText(enable_events=True, key='-C_MANU-', disabled=True)],
             [pyGUI.Text('Internal ID', size =(15, 1)), pyGUI.InputText(enable_events=True, key='-C_INTERNAL_ID-', disabled=True)],
-            [pyGUI.Text('MAC Address', size =(15, 1)), pyGUI.InputText(enable_events=True, key='-C_MAC-', disabled=True), pyGUI.Text('Invalid MAC', key='-C_INVALID_MAC-', visible= False, enable_events=True)],
-            [pyGUI.Text('IP Address', size =(15, 1)), pyGUI.InputText(enable_events=True, key='-C_IP-', disabled=True), pyGUI.Text('Invalid IP', key='-C_INVALID_IP-', visible= False, enable_events=True)],
+            [pyGUI.Text('MAC Address', size =(15, 1)), pyGUI.InputText(enable_events=True, key='-C_MAC-', disabled=True), pyGUI.Text('Invalid MAC', text_color='red', key='-C_INVALID_MAC-', visible= False, enable_events=True)],
+            [pyGUI.Text('IP Address', size =(15, 1)), pyGUI.InputText(enable_events=True, key='-C_IP-', disabled=True), pyGUI.Text('Invalid IP', text_color='red', key='-C_INVALID_IP-', visible= False, enable_events=True)],
             [pyGUI.Text('Physical Location', size =(15, 1)), pyGUI.InputText(enable_events=True, key='-C_LOC-', disabled=True)],
             [pyGUI.Text('Buy Date', size =(15, 1)), pyGUI.InputText(enable_events=True, key='-C_DATE-', disabled=True)],
             [pyGUI.CalendarButton('Calendar', key='-CAL_BUTTON-', target='-CAL-', pad=None, button_color=('black'), format=('%d-%m-%y'), disabled=True)],
@@ -248,8 +258,8 @@ def updateItem(window):
             [pyGUI.Text('Model', size =(15, 1)), pyGUI.InputText(enable_events=True, key='-U_MODEL-', disabled=True)],
             [pyGUI.Text('Manufacturer', size =(15, 1)), pyGUI.InputText(enable_events=True, key='-U_MANU-', disabled=True)],
             [pyGUI.Text('Internal ID', size =(15, 1)), pyGUI.InputText(enable_events=True, key='-U_INTERNAL_ID-', disabled=True)],
-            [pyGUI.Text('MAC Address', size =(15, 1)), pyGUI.InputText(enable_events=True, key='-U_MAC-', disabled=True), pyGUI.Text('Invalid MAC', key='-U_INVALID_MAC-', visible= False, enable_events=True)],
-            [pyGUI.Text('IP Address', size =(15, 1)), pyGUI.InputText(enable_events=True, key='-U_IP-', disabled=True), pyGUI.Text('Invalid IP', key='-U_INVALID_IP-', visible= False, enable_events=True)],
+            [pyGUI.Text('MAC Address', size =(15, 1)), pyGUI.InputText(enable_events=True, key='-U_MAC-', disabled=True), pyGUI.Text('Invalid MAC', text_color='red', key='-U_INVALID_MAC-', visible= False, enable_events=True)],
+            [pyGUI.Text('IP Address', size =(15, 1)), pyGUI.InputText(enable_events=True, key='-U_IP-', disabled=True), pyGUI.Text('Invalid IP', text_color='red', key='-U_INVALID_IP-', visible= False, enable_events=True)],
             [pyGUI.Text('Physical Location', size =(15, 1)), pyGUI.InputText(enable_events=True, key='-U_LOC-', disabled=True)],
             [pyGUI.Text('Buy Date', size =(15, 1)), pyGUI.InputText(enable_events=True, disabled=True, key='-U_DATE-')],
             [pyGUI.CalendarButton('Calendar', target='-U_CAL-', key='-CAL_BUTTON-', pad=None, disabled=True, button_color=('black'), format=('%d-%m-%y'))],
@@ -416,21 +426,24 @@ def checkVun(window):
 
     
 
-        
+    if os.path.exists("../nist/NIST dump.txt"):
+      os.remove("../nist/NIST dump.txt")
+ 
 
     a = [
         [pyGUI.Button('Return to display')],
+        [pyGUI.Text('NIST Vulnerabilities', font = 'ANY 14')],
+        [pyGUI.Text('TXT dump in ../nist/NIST dump.txt', text_color="red", font = 'ANY 12')]
     ]
 
     for c in range(len(data)):
-        a.append([pyGUI.Listbox(values=(data[c]), size=(100,10), horizontal_scroll=True)])
-
+        a.append([pyGUI.Listbox(values=(data[c]), size=(100,10), key=dump(data[c]), horizontal_scroll=True)])
 
     x,y = getCenterScreen()
     
     layout = [
         [
-            pyGUI.Column(a, scrollable=True,  size=(x,y), vertical_scroll_only=False),
+            pyGUI.Column(a, scrollable=True,  size=(x,y-200), vertical_scroll_only=False),
         ]
     ]
 

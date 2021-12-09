@@ -1,0 +1,2 @@
+assetID,assetName,deviceType,description,model,manufacturer,internalID,macAddress,ipAddress,physicalLocation,purchaseDate,warrantyInfo,notes,NISTKeywords
+3,dd-srv-ex1,Network,Lenovo ThinkSystem SR630 Server,7X02A0F4EA,Lenovo,S12770,00:59:07:C2:9E:91,54.221.192.24,"Room 1250, Kydd Building",15-12-21,3-year on-site,Primary Exchange server,Lenovo Thinksystem

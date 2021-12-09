@@ -5,6 +5,7 @@ import sys
 import re as regex               #input validation
 import concurrent.futures        #multi processing 
 import threading                 #threading
+import time
 #-----------------------------------
 
 #allow access to other directories
@@ -18,8 +19,9 @@ sys.path.insert(1, '../backups')
 #--------------------------------------
 from SQL import *
 from interfaces import *
-from user import *
-from asset import *
+from user import User
+from asset import Asset
+from backup import Backup
 #---------------------------------------
 #global variables
 #---------------------------------------
@@ -47,6 +49,7 @@ def loadingFrame():
         if event in (None, 'Exit', 'Cancel'):
             break
         if (loaded):            #if loading screen over
+            time.sleep(2)
             loadWindow.Hide()   #hide the screen
             return layout
             break
@@ -66,10 +69,12 @@ def vunerabilityAPICall():
         future = executor.submit(checkVun, window)              #run the vulnerability check
         layout = future.result()                                #fetch the window layout from the vulnerability check
         
-    loaded = True                                               #end the loading screen
-
-
+    loaded = True #end the loading screen
+    
 def reloadAssets():
+    global assets
+    global loaded
+    
     h = getAsset('hardware')
     s = getAsset('software')
 
@@ -84,18 +89,18 @@ def reloadAssets():
         a = Asset()
         a.setData('software', array)
         assets.append(a)
-        
-    return assets
 
-        
+    loaded = True
+    return assets
+    
 def main():
     global window
     global layout
     global loaded
     global account
+    global assets
 
     assets = reloadAssets()
-        
     
     #keys for input handling
     #---------------------------------------------------------------------------
@@ -141,8 +146,12 @@ def main():
         if event == 'Return to Operations':     
             window = controlPanel(window)
         if event == 'Display':
-            assets = reloadAssets()
-            window = displayItems(window, assets)
+            a = threading.Thread(target=reloadAssets).start()
+            loadingFrame()
+            if loaded:
+                loaded = False
+                window = displayItems(window, assets)
+                
         if event == 'Create':
             window = createItem(window)
         if event == 'Update':
@@ -198,8 +207,11 @@ def main():
                 if (values['-D_ID-'] == assets[i].getID()):
                     assets[i].deleteAsset()
                     found = True
-                    assets = reloadAssets()
-                    window = displayItems(window, assets)
+                    a = threading.Thread(target=reloadAssets).start()
+                    loadingFrame()
+                    if loaded:
+                        loaded = False
+                        window = displayItems(window, assets)
                     break
 
             if not found:    
@@ -212,8 +224,11 @@ def main():
                 if (values['-D_ID_SOFTWARE-'] == assets[i].getID()):
                     assets[i].deleteAsset()
                     found = True
-                    assets = reloadAssets()
-                    window = displayItems(window, assets)
+                    a = threading.Thread(target=reloadAssets).start()
+                    loadingFrame()
+                    if loaded:
+                        loaded = False
+                        window = displayItems(window, assets)
                     break
 
             if not found:    
@@ -341,7 +356,6 @@ def main():
                                     window[keys].update(disabled=False)
                             except:
                                 pass
-                                #print(keys)
                         window['-U_FIND_SOFTWARE-'].update(visible=False)
                         window['-U_UPDATE_SOFTWARE-'].update(visible=True)
                                     
@@ -360,8 +374,11 @@ def main():
                 if int(assets[a].getID()) == int(id):
                     assets[a].setData('software', d)
                     assets[a].updateAsset()
-                    assets = reloadAssets()
-                    window = displayItems(window, assets)   #return to display
+                    a = threading.Thread(target=reloadAssets).start()
+                    loadingFrame()
+                    if loaded:
+                        loaded = False
+                        window = displayItems(window, assets)
             
                     
         if event == '-U_UPDATE-':                   #if hardware update pressed: update the applicable record with new data
@@ -378,8 +395,11 @@ def main():
                             if int(assets[a].getID()) == int(id):
                                 assets[a].setData('hardware', d)
                                 assets[a].updateAsset()
-                                assets = reloadAssets()
-                                window = displayItems(window, assets)   #return to display
+                                a = threading.Thread(target=reloadAssets).start()
+                                loadingFrame()
+                                if loaded:
+                                    loaded = False
+                                    window = displayItems(window, assets)
                 else:
                     window['-U_INVALID_MAC-'].update(visible=True)
             else:
@@ -425,9 +445,12 @@ def main():
                 if regex.match(r'^((\d{1,2}|1\d{2}|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d{2}|2[0-4]\d|25[0-5])$', values['-C_IP-']):   #check valid IP
                     window['-C_INVALID_IP-'].update(visible=False)
                     if regex.match('^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$', values['-C_MAC-']):   #check valid IP
-                       createAsset('hardware', values)
-                       assets = reloadAssets()
-                       window = displayItems(window, assets)
+                        createAsset('hardware', values)
+                        a = threading.Thread(target=reloadAssets).start()
+                        loadingFrame()
+                        if loaded:
+                            loaded = False
+                            window = displayItems(window, assets)
                     else:
                        window['-C_INVALID_MAC-'].update(visible=True)
                 else:
@@ -436,9 +459,16 @@ def main():
 
         if event == 'Create Software':
             if values['-C_NAME_SOFTWARE-'] !="":
-               createAsset('software', values)
-               assets = reloadAssets()
-               window = displayItems(window, assets)
+                createAsset('software', values)
+                a = threading.Thread(target=reloadAssets).start()
+                loadingFrame()
+                if loaded:
+                    loaded = False
+                    a = threading.Thread(target=reloadAssets).start()
+                    loadingFrame()
+                    if loaded:
+                        loaded = False
+                        window = displayItems(window, assets)
             
         if '-CREATE_HARDWARE-' in window.AllKeysDict:
             try:
@@ -523,8 +553,11 @@ def main():
         if event == 'Return to display':
 
             loaded = False
-            assets = reloadAssets()
-            window = displayItems(window, assets)
+            a = threading.Thread(target=reloadAssets).start()
+            loadingFrame()
+            if loaded:
+                loaded = False
+                window = displayItems(window, assets)
 
         initCapTen = ['-USERNAME-', '-PASSWORD-']
 
@@ -552,14 +585,11 @@ def main():
             sFound = -1
             
             for i in range(len(assets)):
-                print(values['-L_HARDWARE-'])
-                print(assets[i].getID())
                 if int(assets[i].getID()) == int(values['-L_HARDWARE-']) and assets[i].assetType == 'hardware':
                     hFound = i                    
                 if int(assets[i].getID()) == int(values['-L_SOFTWARE-']) and assets[i].assetType == 'software':
                     sFound = i
 
-            print(hFound)
             
             if hFound >= 0:
                 window['-INCORRECT_HARDWARE-'].update(visible=False)
@@ -574,8 +604,11 @@ def main():
             if hFound >= 0 and sFound >= 0:
                     if not (assetSelectWhere(values)):
                         assets[hFound].linkAsset(assets[sFound].getID(), assets[hFound].getID())
-                        assets = reloadAssets()
-                        window = displayItems(window, assets)
+                        a = threading.Thread(target=reloadAssets).start()
+                        loadingFrame()
+                        if loaded:
+                            loaded = False
+                            window = displayItems(window, assets)
                     else:
                         window['-INVALID-'].update(visible=True)
                     
@@ -592,6 +625,7 @@ def main():
 
             
     #------------------------------------------------------------------------------------------------------------
-
+            
+         
 main()
 
