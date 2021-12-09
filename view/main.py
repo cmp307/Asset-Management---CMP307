@@ -559,14 +559,16 @@ def main():
                 loaded = False
                 window = displayItems(window, assets)
 
-        initCapTen = ['-USERNAME-', '-PASSWORD-']
 
         if '-INIT-' in window.AllKeysDict:
-            for keys in initCapTen:
-                if event == keys:
-                    if len(values[keys]) > 0:
-                        if len(values[keys]) > 10 or not regex.match('^[a-zA-Z0-9_]+$', values[keys][-1]):
-                            window[keys].update(values[keys][:-1])         
+                if event == '-USERNAME-':
+                    if len(values['-USERNAME-']) > 0:
+                        if len(values['-USERNAME-']) > 10 or not regex.match('^[a-zA-Z0-9_]+$', values['-USERNAME-'][-1]):
+                            window['-USERNAME-'].update(values['-USERNAME-'][:-1])
+                if event == '-PASSWORD-':
+                    if len(values['-PASSWORD-']) > 0:
+                        if len(values['-PASSWORD-']) > 20:
+                            window['-PASSWORD-'].update(values['-PASSWORD-'][:-1])   
 
         
         if event == '-LOGIN-':                                              #if login button is pressed

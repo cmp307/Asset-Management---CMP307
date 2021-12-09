@@ -159,7 +159,7 @@ def createItem(window):
             [pyGUI.CalendarButton('Calendar', key='-CAL_BUTTON-', target='-CAL-', pad=None, button_color=('black'), format=('%d-%m-%y'), disabled=True)],
             [pyGUI.Text('Warranty Information', size = (15, 1)), pyGUI.Multiline(size=(43, 5), key='-C_WARRANTY-', enable_events=True, disabled=True)],
             [pyGUI.Text('Notes', size = (15, 1)), pyGUI.Multiline(size=(43, 5), key='-C_NOTES-', enable_events=True, disabled=True)],
-            [pyGUI.Text('NIST Keywords (CSV)', font = 'ANY 8', size = (20, 1)), pyGUI.Multiline(size=(43, 5), key='-C_KEYWORDS-', enable_events=True, disabled=True)],
+            [pyGUI.Text('NIST Keywords ', font = 'ANY 8', size = (20, 1)), pyGUI.Multiline(size=(43, 5), key='-C_KEYWORDS-', enable_events=True, disabled=True)],
             [pyGUI.Button('Create Hardware', bind_return_key = True, disabled=True)],
             [pyGUI.In(key='-CAL-', enable_events=True, visible=False, disabled=True)],
     ]
@@ -176,7 +176,7 @@ def createItem(window):
             [pyGUI.Text('Buy Date', size =(15, 1)), pyGUI.InputText(enable_events=True, key='-C_DATE_SOFTWARE-', disabled=True)],
             [pyGUI.CalendarButton('Calendar', key='-CAL_BUTTON_SOFTWARE-', target='-CAL_SOFTWARE-', pad=None, button_color=('black'), format=('%d-%m-%y'), disabled=True)],
             [pyGUI.Text('Notes', size = (15, 1)), pyGUI.Multiline(size=(43, 5), key='-C_NOTES_SOFTWARE-', enable_events=True, disabled=True)],
-            [pyGUI.Text('NIST Keywords (CSV)', font = 'ANY 8', size = (20, 1)), pyGUI.Multiline(size=(43, 5), key='-C_KEYWORDS_SOFTWARE-', enable_events=True, disabled=True)],
+            [pyGUI.Text('NIST Keywords ', font = 'ANY 8', size = (20, 1)), pyGUI.Multiline(size=(43, 5), key='-C_KEYWORDS_SOFTWARE-', enable_events=True, disabled=True)],
             [pyGUI.Button('Create Software', bind_return_key = True, disabled=True)],
             [pyGUI.In(key='-CAL_SOFTWARE-', enable_events=True, visible=False, disabled=True)],
     ]
@@ -210,14 +210,14 @@ def deleteItem(window):
     hardware = [
             [pyGUI.Text('Hardware Delete', font = 'ANY 14', key='-DELETE_HARDWARE-')],
             [pyGUI.Text('Asset ID', size =(15, 1)), pyGUI.InputText(enable_events=True, key='-D_ID-',  disabled=True)],
-            [pyGUI.Text('Invalid Asset ID', size =(15, 1), key='-D_INVALID-', enable_events=True, visible = False)],
+            [pyGUI.Text('Invalid Asset ID', size =(15, 1), text_color='red', key='-D_INVALID-', enable_events=True, visible = False)],
             [pyGUI.Button('Delete Hardware', disabled=True)],
     ]
 
     software = [
             [pyGUI.Text('Software Delete', font = 'ANY 14', key='-DELETE_SOFTWARE-')],
             [pyGUI.Text('Asset ID', size =(15, 1)), pyGUI.InputText(enable_events=True, key='-D_ID_SOFTWARE-',  disabled=True)],
-            [pyGUI.Text('Invalid Asset ID', size =(15, 1), key='-D_INVALID_SOFTWARE-', enable_events=True, visible = False)],
+            [pyGUI.Text('Invalid Asset ID', size =(15, 1),text_color='red', key='-D_INVALID_SOFTWARE-', enable_events=True, visible = False)],
             [pyGUI.Button('Delete Software', disabled=True)],
     ]
 
@@ -265,7 +265,7 @@ def updateItem(window):
             [pyGUI.CalendarButton('Calendar', target='-U_CAL-', key='-CAL_BUTTON-', pad=None, disabled=True, button_color=('black'), format=('%d-%m-%y'))],
             [pyGUI.Text('Warranty Information', size = (15, 1)), pyGUI.Multiline(size=(43, 5), disabled=True, key='-U_WARRANTY-', enable_events=True)],
             [pyGUI.Text('Notes', size = (15, 1)), pyGUI.Multiline(size=(43, 5), key='-U_NOTES-', disabled=True, enable_events=True)],
-            [pyGUI.Text('NIST Keywords (CSV)', font = 'ANY 8', size = (20, 1)), pyGUI.Multiline(size=(43, 5), disabled=True,key='-U_KEYWORDS-', enable_events=True)],
+            [pyGUI.Text('NIST Keywords ', font = 'ANY 8', size = (20, 1)), pyGUI.Multiline(size=(43, 5), disabled=True,key='-U_KEYWORDS-', enable_events=True)],
             [pyGUI.Button('Update Asset', key='-U_UPDATE-', visible = False)],
             [pyGUI.In(key='-U_CAL-', enable_events=True, visible=False)], 
     ]
@@ -284,7 +284,7 @@ def updateItem(window):
             [pyGUI.Text('Buy Date', size =(15, 1)), pyGUI.InputText(enable_events=True, key='-U_DATE_SOFTWARE-', disabled=True)],
             [pyGUI.CalendarButton('Calendar', key='-CAL_BUTTON_SOFTWARE-', target='-U_CAL_SOFTWARE-', pad=None, button_color=('black'), format=('%d-%m-%y'), disabled=True)],
             [pyGUI.Text('Notes', size = (15, 1)), pyGUI.Multiline(size=(43, 5), key='-U_NOTES_SOFTWARE-', enable_events=True, disabled=True)],
-            [pyGUI.Text('NIST Keywords (CSV)', font = 'ANY 8', size = (20, 1)), pyGUI.Multiline(size=(43, 5), key='-U_KEYWORDS_SOFTWARE-', enable_events=True, disabled=True)],
+            [pyGUI.Text('NIST Keywords ', font = 'ANY 8', size = (20, 1)), pyGUI.Multiline(size=(43, 5), key='-U_KEYWORDS_SOFTWARE-', enable_events=True, disabled=True)],
             [pyGUI.In(key='-CAL_SOFTWARE-', enable_events=True, visible=False, disabled=True)],
             [pyGUI.Button('Update Asset', key='-U_UPDATE_SOFTWARE-', visible = False)],
             [pyGUI.In(key='-U_CAL_SOFTWARE-', enable_events=True, visible=False)], 
