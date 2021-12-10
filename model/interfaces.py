@@ -5,7 +5,7 @@ import subprocess
 import os
 
 from ctypes import windll    #Screen size
-from SQL import assetLinkRetrieve  #SQL queries
+from SQL import *
 from vunerability import *   #Vulnerability check
 
 from user import *

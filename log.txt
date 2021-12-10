@@ -1,0 +1,274 @@
+commit 9b00c97011ffa621e7156c447113b04060f2f114
+Author: EwanStewart <80590593+EwanStewart@users.noreply.github.com>
+Date:   Fri Dec 10 16:05:33 2021 +0000
+
+    README update
+
+commit b18f093b8ad874612a6392f22ccba51bd0627f54
+Author: Ewan Stewart <ewnastewart04@outlook.com>
+Date:   Thu Dec 9 23:14:28 2021 +0000
+
+    clean up
+
+commit a527641932987a59aabe94b671d1ea7e3fadb374
+Author: Ewan Stewart <ewnastewart04@outlook.com>
+Date:   Thu Dec 9 16:47:50 2021 +0000
+
+    made error txt red, dumped nist to txt
+
+commit 8be3dabbaaae593c01c253781f714f3754bce6f7
+Author: Ewan Stewart <ewnastewart04@outlook.com>
+Date:   Wed Dec 8 23:49:37 2021 +0000
+
+    added asset class
+
+commit 0af72bb691d9e1bad2e9403e56c0f04585c42ecf
+Merge: e53f88f b3ae9d5
+Author: EwanStewart <80590593+EwanStewart@users.noreply.github.com>
+Date:   Wed Dec 8 19:12:59 2021 +0000
+
+    Merge pull request #5 from cmp307/test
+    
+    changed user and backup to classes
+
+commit b3ae9d5645e5098ea4e08a64f5a02046f70d3183
+Author: Ewan Stewart <ewnastewart04@outlook.com>
+Date:   Wed Dec 8 19:11:45 2021 +0000
+
+    changed user and backup to classes
+
+commit e53f88faf9f89c473f37851bbaaa452d73b77a70
+Author: Ewan Stewart <ewnastewart04@outlook.com>
+Date:   Tue Dec 7 18:15:49 2021 +0000
+
+    bugs
+
+commit 9ea1ec712f10aca7177556b89549795a72d4d1d8
+Author: Ewan Stewart <ewanstewart04@outlook.com>
+Date:   Mon Dec 6 16:08:02 2021 +0000
+
+    comments and clean up
+
+commit eafe6a77ed66cbf45b36646d965b04004947f021
+Author: Ewan Stewart <ewnastewart04@outlook.com>
+Date:   Sun Dec 5 22:59:01 2021 +0000
+
+    more sizing issues
+
+commit 509f946c2bb031722132e67237c95b3c6919fa5b
+Author: Ewan Stewart <ewanstewart04@outlook.com>
+Date:   Sun Dec 5 22:56:05 2021 +0000
+
+    sizing issue
+
+commit 9d2ede6bdc5c65c707023e258dc5fa0cd1e0b550
+Author: Ewan Stewart <ewnastewart04@outlook.com>
+Date:   Sun Dec 5 22:26:05 2021 +0000
+
+    basic asset linking
+
+commit db42001c20c20f5f85fabc30703b72aa22a52060
+Author: Ewan Stewart <ewnastewart04@outlook.com>
+Date:   Sun Dec 5 20:26:35 2021 +0000
+
+    clean up
+
+commit e16a05e092854b34d994b9ba89e0865f19a5589f
+Author: Ewan Stewart <ewnastewart04@outlook.com>
+Date:   Sat Dec 4 22:33:58 2021 +0000
+
+    add software create, update and delete
+
+commit b9496c21e9d06420d4bf3b67ef82a1267ccc139c
+Merge: f5085d0 da272bb
+Author: Ewan Stewart <ewnastewart04@outlook.com>
+Date:   Fri Dec 3 17:41:28 2021 +0000
+
+    Merge branch 'main' of https://github.com/cmp307/project-EwanStewart
+
+commit f5085d010437ee678dd0b25318316a3a0915d9f1
+Author: Ewan Stewart <ewnastewart04@outlook.com>
+Date:   Fri Dec 3 17:40:52 2021 +0000
+
+    added a calendar function to the date field to ensure data integrity
+
+commit da272bbccd7646bb27b817387c83bd7e7a6ec93b
+Author: EwanStewart <80590593+EwanStewart@users.noreply.github.com>
+Date:   Thu Dec 2 21:00:10 2021 +0000
+
+    Update README.md
+
+commit 64d464cac1eec3e51b75d88561e1f0d1f518774e
+Author: Ewan Stewart <ewnastewart04@outlook.com>
+Date:   Thu Dec 2 20:23:06 2021 +0000
+
+    The end is nigh
+
+commit 3b40b443bd42407ccc0968af3cf371a5072d28a2
+Author: Ewan Stewart <ewnastewart04@outlook.com>
+Date:   Thu Dec 2 16:22:54 2021 +0000
+
+    added second report user authentication
+
+commit 5fbcfbf7305fcc5f58bcb94a5299e718cea187e6
+Author: Ewan Stewart <ewnastewart04@outlook.com>
+Date:   Thu Dec 2 15:51:35 2021 +0000
+
+    added delete validation
+
+commit 76e4a3e0ba234e1d9094e2e4ca0a898b8ebc8e4a
+Author: Ewan Stewart <ewnastewart04@outlook.com>
+Date:   Wed Dec 1 22:55:15 2021 +0000
+
+    added function to search for vulnerabilities by asset ID
+
+commit eecc925206e35fce8799b14e93206d22d02adbc8
+Author: Ewan Stewart <ewnastewart04@outlook.com>
+Date:   Wed Dec 1 22:31:47 2021 +0000
+
+    fixed update functionality past item values now displayed in update fields
+
+commit 5db8559b6963f33a11dfbea5da83c2b72048963d
+Author: Ewan Stewart <ewnastewart04@outlook.com>
+Date:   Wed Dec 1 21:30:53 2021 +0000
+
+    backup feature
+
+commit 8a568f56cd5b601f539b94473fc3a50a946d1fea
+Author: Ewan Stewart <ewnastewart04@outlook.com>
+Date:   Mon Nov 29 21:19:47 2021 +0000
+
+    input validation to create feature
+
+commit 5fe4fa457df82c92d0747c6a04d38ddc7d8b5b66
+Author: Ewan Stewart <ewnastewart04@outlook.com>
+Date:   Fri Nov 12 21:16:57 2021 +0000
+
+    bug fix
+
+commit 1407f3f7d450e03c3540d1070468bd7832c5f549
+Author: Ewan <ewanstewart04@outlook.com>
+Date:   Fri Nov 12 21:14:32 2021 +0000
+
+    byte array fix
+
+commit f410560a41c0d3105db1409202cabab8687933d7
+Author: Ewan Stewart <ewnastewart04@outlook.com>
+Date:   Fri Nov 12 19:58:29 2021 +0000
+
+    added loading function when requesting api
+
+commit 52767ba9ab015f1d1aa33cb13c95a21ec32e4ee2
+Author: Ewan Stewart <ewnastewart04@outlook.com>
+Date:   Thu Nov 11 20:07:35 2021 +0000
+
+    added vun search
+
+commit f3cfe0e12dfb8b8bd530fba6b0856b725e203d0f
+Author: Ewan Stewart <ewnastewart04@outlook.com>
+Date:   Tue Nov 9 18:59:34 2021 +0000
+
+    clean up update
+
+commit aeeb1e0968f6b4776ef06440fd0697c6994189ce
+Author: Ewan Stewart <ewnastewart04@outlook.com>
+Date:   Tue Nov 9 17:43:32 2021 +0000
+
+    cleaned up display
+
+commit e0cbbbb77ef941e04273a3ff2f97c3adf5f9cb82
+Author: EwanStewart <80590593+EwanStewart@users.noreply.github.com>
+Date:   Tue Nov 2 21:19:21 2021 +0000
+
+    Update README.md
+
+commit 95f96fc7c0eaa1582580d28972663b2303237593
+Author: Ewan Stewart <ewnastewart04@outlook.com>
+Date:   Tue Nov 2 20:42:28 2021 +0000
+
+    fix
+
+commit 311fc05ba80bba8cd3175dedea0cc3216947ccec
+Author: Ewan Stewart <ewnastewart04@outlook.com>
+Date:   Tue Nov 2 20:16:58 2021 +0000
+
+    screen size adjust
+
+commit 74f53c6929d7e6fb19f45aa7de08921aebfd975c
+Author: Ewan <ewanstewart04@outlook.com>
+Date:   Tue Nov 2 19:49:10 2021 +0000
+
+    remove bug
+
+commit efb1b02821a517e979ef6114defd145e8bc96800
+Author: Ewan Stewart <ewnastewart04@outlook.com>
+Date:   Tue Nov 2 19:34:25 2021 +0000
+
+    added create,update,delete,display operations
+
+commit 53ea5ba3d8701ec6356239fd31fa7fca9837c6a2
+Author: Ewan Stewart <ewnastewart04@outlook.com>
+Date:   Mon Nov 1 21:39:00 2021 +0000
+
+    create asset feature
+
+commit a794a5ed4ebdae4f3a4138c8ecfc84d31464eecb
+Merge: 256653b f911329
+Author: Ewan Stewart <ewnastewart04@outlook.com>
+Date:   Mon Nov 1 18:49:49 2021 +0000
+
+    Merge branch 'main' of https://github.com/cmp307/project-EwanStewart
+
+commit f9113299da8f7f472bb96f232a0ce77f9d15bc0a
+Author: EwanStewart <80590593+EwanStewart@users.noreply.github.com>
+Date:   Mon Nov 1 01:13:41 2021 +0000
+
+    Update README.md
+
+commit 5a12dd795609b95afc5486ef501bb60379684af5
+Author: EwanStewart <80590593+EwanStewart@users.noreply.github.com>
+Date:   Mon Nov 1 01:13:17 2021 +0000
+
+    Update README.md
+
+commit 256653b2bd7e53f2da4cb5b35c211fe8345fd4ec
+Author: Ewan Stewart <ewnastewart04@outlook.com>
+Date:   Mon Nov 1 01:09:54 2021 +0000
+
+    install script tidy
+
+commit 695adbb1ee50a19708ceb56e5c6038b39365334b
+Author: Ewan <ewanstewart04@outlook.com>
+Date:   Mon Nov 1 00:43:45 2021 +0000
+
+    fixed install script
+
+commit bc3adf6cd169443dc186e7bcec9fe5e36876f437
+Author: EwanStewart <80590593+EwanStewart@users.noreply.github.com>
+Date:   Mon Nov 1 00:10:22 2021 +0000
+
+    Add files via upload
+
+commit 59481ecabf8b5a2249dba81939e5fe000effd065
+Author: EwanStewart <80590593+EwanStewart@users.noreply.github.com>
+Date:   Mon Nov 1 00:09:51 2021 +0000
+
+    Add files via upload
+
+commit 870a2c537c856ffe872d5f9cb348bc23cdf28f75
+Author: Ewan Stewart <ewnastewart04@outlook.com>
+Date:   Mon Nov 1 00:02:00 2021 +0000
+
+    install script
+
+commit 2720b9a86f5c012eaec3a435a872d0160b155be0
+Author: Ewan Stewart <ewnastewart04@outlook.com>
+Date:   Sun Oct 31 20:19:22 2021 +0000
+
+    created login functionality with UI
+
+commit 6303698d4bf13a61f39182b765ba7f553ddb44c9
+Author: Ewan Stewart <ewnastewart04@outlook.com>
+Date:   Sun Oct 31 19:58:18 2021 +0000
+
+    commit clean

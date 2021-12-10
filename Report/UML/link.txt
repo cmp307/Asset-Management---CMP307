@@ -1,0 +1,49 @@
+actor user
+
+activate user
+
+user->validate ids: IDs to link
+
+activate validate ids
+
+  alt invalid input
+  validate ids->user: invalid input error
+  end
+  
+  validate ids->find ids: IDs to Link
+  
+deactivate validates id
+
+
+
+
+
+activate find ids
+  alt either id doesn't exists
+  find ids->user: invalid id error
+  end
+  
+  find ids->check link exists: IDs to Link
+deactivate find ids
+
+activate check link exists
+  alt link exists
+  check link exists->user: link exists error
+  end
+  
+  check link exists->link assets: IDs to Link
+deactivate check link exists
+
+activate link assets
+link assets->user: display assets
+deactivate link assets
+
+
+
+
+
+
+
+deactivate user
+
+

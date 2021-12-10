@@ -1,0 +1,17 @@
+actor user
+activate user
+
+activate validate login
+user->validate login: login credentials
+
+alt invalid credentials
+validate login->user: invalid login error
+end
+
+validate login->user: display control panel  
+deactivate validate login
+
+
+deactivate user
+
+

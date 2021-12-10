@@ -1,0 +1,23 @@
+actor user
+
+activate user
+activate display assets
+user->display assets:
+
+display assets->user:display software and hardware assets
+
+alt no data
+display assets-> user: display no data message
+end
+
+alt no data in hardware
+display assets-> user: display only software assets
+end
+alt no data in software
+display assets-> user: display only hardware assets
+end
+deactivate display assets
+deactivate user
+
+
+

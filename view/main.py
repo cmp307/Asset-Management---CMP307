@@ -22,6 +22,8 @@ from interfaces import *
 from user import User
 from asset import Asset
 from backup import Backup
+from connection import connectToDatabase
+
 #---------------------------------------
 #global variables
 #---------------------------------------

@@ -1,7 +1,6 @@
 from mysql.connector import connect
 
 def connectToDatabase():
-    try:
         mydb = connect(
           host="lochnagar.abertay.ac.uk",
           user="sql1900598",
@@ -9,8 +8,7 @@ def connectToDatabase():
           database="sql1900598"
         )
         return mydb.cursor(prepared=True), mydb
-    except:
-        print('not connected to the firewall')
+
 
 
 

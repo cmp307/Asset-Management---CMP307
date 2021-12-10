@@ -55,8 +55,7 @@ class Asset:
 
     def updateAsset(self):
         conn, mydb = connectToDatabase()
-
-        print(self.name)
+        
         if self.assetType == 'hardware':
             sqlString = "update cmp307hardware SET assetName = %s, deviceType = %s, description = %s, model = %s, manufacturer = %s, internalID = %s, macAddress = %s, ipAddress = %s, physicalLocation = %s, purchaseDate = %s, warrantyInfo = %s, notes = %s , NISTKeywords = %s WHERE assetID = %s"
             conn.execute(sqlString, (self.name, self.deviceType, self.description, self.model, self.manufacturer, self.internalID, self.MAC, self.IP, self.physicalLocation, self.date, self.warranty, self.notes, self.keyword, self.id))          

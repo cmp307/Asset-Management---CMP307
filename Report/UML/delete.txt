@@ -1,0 +1,34 @@
+actor user
+
+activate user
+
+user->validate id: delete id
+
+activate validate id
+
+  alt invalid input
+  validate id->user: invalid input error
+  end
+  
+  validate id->find asset id: delete id
+deactivate validate id
+
+activate find asset id
+
+  alt invalid id
+  find asset id->user: invalid id
+  end
+  
+  activate delete asset
+  find asset id->delete asset: delete id
+  delete asset->user: display asset
+  deactivate delete asset
+
+deactivate find asset id
+
+
+
+
+deactivate user
+
+

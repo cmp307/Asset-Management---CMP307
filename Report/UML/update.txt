@@ -1,0 +1,41 @@
+actor user
+
+activate user
+
+user->validate id input: asset ID
+
+activate validate id input
+
+  alt invalid input
+  validate id input->user: invalid input error
+  end
+
+  validate id input->find asset id: asset ID
+deactivate validate id input
+  
+activate find asset id
+    alt invalid asset ID
+    find asset id->user: invalid asset ID
+    end
+    find asset id->user: asset values
+deactivate find asset id
+  
+  
+user->validate update values: updated asset values
+
+activate validate update values 
+  alt invalid input
+  validate update values->user: invalid input error
+  end
+
+  validate update values->update asset: update values
+ deactivate validate update values
+  
+  
+  activate update asset 
+  	update asset->user: display assets
+  deactivate update asset
+  
+deactivate user
+
+

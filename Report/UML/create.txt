@@ -1,0 +1,23 @@
+actor user
+activate user
+
+user->validate asset: input values
+
+alt invalid input
+validate asset->user: invalid input error
+end
+
+activate validate asset
+validate asset->add to database:
+add to database->validate asset: success
+
+  activate add to database
+  validate asset->user: display assets
+  deactivate add to database
+  
+deactivate validate asset
+
+
+deactivate user
+
+
