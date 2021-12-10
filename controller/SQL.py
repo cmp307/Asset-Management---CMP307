@@ -15,7 +15,23 @@ def getAssetWhere(request, id):
         sqlString = "SELECT * FROM cmp307software WHERE assetID = %s"
         
     conn.execute(sqlString, (id,))
-    return conn.fetchall()
+    records = conn.fetchall()
+        
+    row = []
+    data = []
+
+    try:
+        for i in range(len(records)):
+            row = []
+            for j in range(len(records[i])):
+                if not (type(records[i][j]) == int):
+                    row.append(records[i][j].decode())
+                else:
+                    row.append(records[i][j])
+            data.append(row)
+        return data
+    except:
+        return records
 
     
 def createAsset(request, formData):
