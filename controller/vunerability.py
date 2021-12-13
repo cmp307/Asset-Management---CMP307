@@ -1,11 +1,16 @@
-import urllib.request, json, pprint
+import urllib.request, json, pprint, ssl
 
 
 def vunerabilitySearch(query):
-    with urllib.request.urlopen("https://services.nvd.nist.gov/rest/json/cves/1.0?namingFormat=2.3&keyword="+query) as url:
-        data = json.loads(url.read().decode())
-    return data
-
+    try:
+        with urllib.request.urlopen("https://services.nvd.nist.gov/rest/json/cves/1.0?namingFormat=2.3&keyword="+query) as url:
+            data = json.loads(url.read().decode())
+        return data
+    except:
+        ssl._create_default_https_context = ssl._create_unverified_context
+        with urllib.request.urlopen("https://services.nvd.nist.gov/rest/json/cves/1.0?namingFormat=2.3&keyword="+query) as url:
+            data = json.loads(url.read().decode())
+        return data
 
 
 def format (data):

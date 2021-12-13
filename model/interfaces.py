@@ -113,7 +113,7 @@ def vulnerabilitySearch(window, hardware, software):
         layout = [
             [pyGUI.Image('scottishGlenLogo.png', background_color="grey80")],
             [pyGUI.Button('Return to Operations')],
-            [pyGUI.Button('Search entire table for vunerabilities')],
+            [pyGUI.Button('Search entire table for vulnerabilities')],
             [pyGUI.Button('Submit', key='-S_ASSET_ID_SUBMIT-', visible=False)],
         ]
         

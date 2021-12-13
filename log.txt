@@ -1,3 +1,33 @@
+commit d221266c2ca53249b90db242a4939720400a1980
+Author: Ewan Stewart <ewnastewart04@outlook.com>
+Date:   Fri Dec 10 19:46:35 2021 +0000
+
+    update decode bug fix
+
+commit 4544fcd8e1e2a4ff38b86805e9fff700fbe25042
+Author: EwanStewart <80590593+EwanStewart@users.noreply.github.com>
+Date:   Fri Dec 10 19:38:04 2021 +0000
+
+    Rename NIST dump.txt.txt to NIST dump.txt
+
+commit 327725282722a9ef398fd8c0d18a7e8fa4ec3efd
+Author: Ewan Stewart <ewnastewart04@outlook.com>
+Date:   Fri Dec 10 19:35:37 2021 +0000
+
+    error fix as backup file was empty
+
+commit 8ad6afd843593de184d047049c2be03ef93a2d80
+Author: Ewan Stewart <ewnastewart04@outlook.com>
+Date:   Fri Dec 10 19:33:36 2021 +0000
+
+    error fix as nist file was empty
+
+commit 08579a18a0eb0aa1f58dcb9b6cab1a40dcd37933
+Author: Ewan Stewart <ewnastewart04@outlook.com>
+Date:   Fri Dec 10 19:28:39 2021 +0000
+
+    final code commit
+
 commit 9b00c97011ffa621e7156c447113b04060f2f114
 Author: EwanStewart <80590593+EwanStewart@users.noreply.github.com>
 Date:   Fri Dec 10 16:05:33 2021 +0000
