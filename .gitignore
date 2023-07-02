@@ -1,0 +1,21 @@
+# Ignore compiled Python files
+*.pyc
+
+# Ignore system-specific files
+__pycache__/
+.env
+
+# Ignore IDE-specific files
+.vscode/
+*.pydevproject
+*.idea/
+*.egg-info/
+*.iml
+*.swp
+*.swo
+
+# Ignore local development configuration
+/config.py
+
+# Ignore any file named connection.py in the specified directory
+/controller/connection.py
