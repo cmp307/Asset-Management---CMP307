@@ -1,5 +1,9 @@
 CRUD application which allows for hardware and software management with integration of the NIST API, which identifies vulnerabilities.
 
+REQUIRES Abertay Firewall authentication.
+
+https://fw1.abertay.ac.uk:4100/logon.shtml
+
 ![Screenshot (50)](https://github.com/cmp307/Asset-Management---CMP307/assets/80590593/64481570-9500-43ea-a2c1-a9fe16636df0)
 ![Screenshot (51)](https://github.com/cmp307/Asset-Management---CMP307/assets/80590593/d3236ef5-bde1-4823-b822-a8b92980b9fb)
 ![Screenshot (52)](https://github.com/cmp307/Asset-Management---CMP307/assets/80590593/fa55f8ab-1573-4845-84d8-4c7c77575a39)
